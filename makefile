@@ -1,4 +1,4 @@
-all: just_lcd.s9 just_serial.s9
+all: just_lcd.s9 just_serial.s9 just_ram_lcd.s9
 
 #
 # JUST_LCD
@@ -21,6 +21,18 @@ just_serial.s9 : just_serial.asm
 
 write_just_serial:
 	minipro -p AT28C64 -w just_serial.s9
+
+#
+# JUST_RAM_LCD
+# ------------
+# Assumes CPU, ROM, LCD and RAM.
+#
+just_ram_lcd.s9 : just_ram_lcd.asm
+	lwasm --format=srec --map=just_ram_lcd.map --list=just_ram_lcd.lst -o just_ram_lcd.s9 just_ram_lcd.asm
+
+write_just_ram_lcd:
+	minipro -p AT28C64 -w just_ram_lcd.s9
+
 
 clean:
 	rm *.s9 *.lst *.map *.o
