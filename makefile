@@ -1,4 +1,4 @@
-all: just_lcd.s9 just_serial.s9 just_ram_lcd.s9
+all: just_lcd.s9 just_serial.s9 just_ram_lcd.s9 just_ram.s9
 
 #
 # JUST_LCD
@@ -32,6 +32,18 @@ just_ram_lcd.s9 : just_ram_lcd.asm
 
 write_just_ram_lcd:
 	minipro -p AT28C64 -w just_ram_lcd.s9
+
+
+#
+# JUST_RAM
+# --------
+# Assumes CPU, ROM, and RAM.  Can only be verified with an osciloscope
+#
+just_ram.s9 : just_ram.asm
+	lwasm --format=srec --map=just_ram.map --list=just_ram.lst -o just_ram.s9 just_ram.asm
+
+write_just_ram:
+	minipro -p AT28C64 -w just_ram.s9
 
 
 clean:
