@@ -1,29 +1,12 @@
 	ORG $1000
 
-ram_dat_table_start EQU $E050
-ram_dat_table_end	EQU $E060
-ram_map1_select EQU $E060
-ram_map2_select EQU $E070
-
 main
-ram_init
-	LDA #$FF
-	STA ram_map1_select
-	LEAX ram_page_table_1,pcr
-	LDY #ram_dat_table_start
-ram_init_more
-	LDA ,X+
-	COMA
-	STA ,Y+
-	CMPY #ram_dat_table_end
-	BLO ram_init_more
-ram_init_done
+	INCLUDE ram.asm
 
 stack_init
-	LDU #$1000
-	LDS #$2000
+	LDU #$A000
+	LDS #$B000
 stack_init_done
-
 
 	LBSR lcd_init
 
@@ -31,7 +14,6 @@ print_message
 	LEAX string_boot,pcr
 	LBSR lcd_puts
 	LBSR wait
-
 
 memcheck
 	LDA #$FF
@@ -108,11 +90,7 @@ print_yes_24
 
 
 string_boot
-	FCN "RamTst:"
-
-ram_page_table_1
-	FCB $00,$01,$02,$03,$04,$05,$06,$07,$08,$09,$0A,$0B,$0C,$0D,$0E,$0F
-
+	FCN "RamTest:"
 
 ;
 ;	WAIT
