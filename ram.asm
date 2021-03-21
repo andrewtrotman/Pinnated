@@ -31,3 +31,4 @@ ram_init_more
 	CMPY #ram_dat_table_end
 	BLO ram_init_more
 ram_init_done
+
