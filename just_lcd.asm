@@ -1,6 +1,6 @@
-lcd_command EQU $E090
+lcd_command 	EQU $E090
 lcd_status	EQU $E090
-lcd_data		EQU $E091
+lcd_data	EQU $E091
 
 
 main

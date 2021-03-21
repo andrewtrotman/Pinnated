@@ -19,6 +19,7 @@ ram_init_more
 
 loop
 	LDA $0000
+	STA $0001
 	BRA loop
 	
 ram_page_table_1
