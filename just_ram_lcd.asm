@@ -14,11 +14,7 @@ print_message
 	LBSR lcd_puts
 	LBSR wait
 
-	LBSR memcheck
-	LBSR wait
-
-
-	LEAX ram_page_table_repeat,pcr
+	LEAX ram_page_table_1,pcr
 	LDY #ram_dat_table_start
 ram_init_more_1
 	LDA ,X+
@@ -26,6 +22,23 @@ ram_init_more_1
 	STA ,Y+
 	CMPY #ram_dat_table_end
 	BLO ram_init_more_1
+
+
+	LBSR memcheck
+	LBSR wait
+
+
+	LEAX ram_page_table_repeat,pcr
+	LDY #ram_dat_table_start
+ram_init_more_2
+	LDA ,X+
+	COMA
+	STA ,Y+
+	CMPY #ram_dat_table_end
+	BLO ram_init_more_2
+
+	LBSR memcheck
+	LBSR wait
 
 	LBRA print_message
 
