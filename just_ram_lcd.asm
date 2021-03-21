@@ -6,7 +6,6 @@ main
 stack_init
 	LDU #$A000
 	LDS #$B000
-stack_init_done
 
 	LBSR lcd_init
 
@@ -15,82 +14,59 @@ print_message
 	LBSR lcd_puts
 	LBSR wait
 
-memcheck
-	LDA #$FF
-	STA $1000
-	LDA #$FE
-	STA $0FFF
-	LDA #$FD
-	STA $0FFE
-	LDA #$FC
-	STA $0FFD
-	LDA #$FB
-	STA $0FFC
-	LDA #$FA
-	STA $0FFB
-
-	LDB #'Y'
-	LDA $1000
-	CMPA #$FF
-	BEQ print_yes_1
-	LDB #'N'
-print_yes_1
-	STB lcd_data
-	LBSR lcd_wait
-
-	LDB #'Y'
-	LDA $0FFF
-	CMPA #$FE
-	BEQ print_yes_20
-	LDB #'N'
-print_yes_20
-	STB lcd_data
-	LBSR lcd_wait
-
-	LDB #'Y'
-	LDA $0FFE
-	CMPA #$FD
-	BEQ print_yes_21
-	LDB #'N'
-print_yes_21
-	STB lcd_data
-	LBSR lcd_wait
-
-	LDB #'Y'
-	LDA $0FFD
-	CMPA #$FC
-	BEQ print_yes_22
-	LDB #'N'
-print_yes_22
-	STB lcd_data
-	LBSR lcd_wait
-
-	LDB #'Y'
-	LDA $0FFC
-	CMPA #$FB
-	BEQ print_yes_23
-	LDB #'N'
-print_yes_23
-	STB lcd_data
-	LBSR lcd_wait
-
-	LDB #'Y'
-	LDA $0FFB
-	CMPA #$FA
-	BEQ print_yes_24
-	LDB #'N'
-print_yes_24
-	STB lcd_data
-	LBSR lcd_wait
-
-
+	LBSR memcheck
 	LBSR wait
+
+
+	LEAX ram_page_table_repeat,pcr
+	LDY #ram_dat_table_start
+ram_init_more_1
+	LDA ,X+
+	COMA
+	STA ,Y+
+	CMPY #ram_dat_table_end
+	BLO ram_init_more_1
+
 	LBRA print_message
 
+memcheck
+	PSHS D
+
+	LDA #$5A
+	STA $1000
+
+	LDA $1000
+	LBSR check_one
+	LDA $3000
+	LBSR check_one
+	LDA $5000
+	LBSR check_one
+	LDA $7000
+	LBSR check_one
+	LDA $9000
+	LBSR check_one
+	LDA $B000
+	LBSR check_one
+	LDA $D000
+	LBSR check_one
+
+	PULS D
+	RTS
+
+
+check_one
+	LDB #'Y'
+	CMPA #$5A
+	BEQ check_one_yes
+	LDB #'N'
+check_one_yes
+	STB lcd_data
+	LBSR lcd_wait
+	RTS
 
 
 string_boot
-	FCN "RamTest:"
+	FCN "RT:"
 
 ;
 ;	WAIT
@@ -106,6 +82,10 @@ wait_next
 	BNE wait_next
 	PULS X
 	RTS
+
+
+ram_page_table_repeat
+	FCB $01,$02,$01,$02,$01,$02,$01,$02,$01,$02,$01,$02,$01,$02,$01,$02
 
 
 	INCLUDE lcd.asm

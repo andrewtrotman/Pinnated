@@ -34,7 +34,7 @@ lcd_init
 	STA lcd_command
 	BSR lcd_wait
 
-	LDA #%10000000			; set DDRAM address (next operation is write to dispay)
+	LDA #%10000000			; set DDRAM address (next operation is write to display)
 	STA lcd_command
 	BSR lcd_wait
 
