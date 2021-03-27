@@ -91,19 +91,3 @@ serial_putchar_wait
 
 	STA serial_data					; write
 	RTS
-
-;
-;	SERIAL_PUTS
-;	-----------
-;	Print the '\0' terminated string pointed to by X
-;
-serial_puts
-	PSHS A,X
-serial_putchar_next
-	LDA ,X+
-	BEQ serial_puts_done
-	BSR serial_putchar
-	BRA serial_putchar_next
-serial_puts_done
-	PULS A,X
-	RTS
