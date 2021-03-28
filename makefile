@@ -1,4 +1,16 @@
-all: just_lcd.s9 just_serial.s9 just_ram_lcd.s9 just_ram.s9
+all: just_lcd.s9 just_serial.s9 just_ram_lcd.s9 just_ram.s9 bios.s9
+
+#
+# BIOS
+# ----
+# Assumes CPU, ROM, RAM, 68B50 serial at 115200(N81)
+#
+bios.s9 : bios.asm io.asm serial.asm lcd.asm ram.asm
+	lwasm --format=srec --map=bios.map --list=bios.lst -o bios.s9 bios.asm
+
+write_bios:
+	minipro -p AT28C64 -w bios.s9
+
 
 #
 # JUST_LCD
@@ -32,7 +44,6 @@ just_ram_lcd.s9 : just_ram_lcd.asm
 
 write_just_ram_lcd:
 	minipro -p AT28C64 -w just_ram_lcd.s9
-
 
 #
 # JUST_RAM

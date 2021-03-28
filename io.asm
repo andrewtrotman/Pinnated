@@ -7,9 +7,18 @@
 ;
 ; Branch Table
 ;
-io_init	FDB	serial_init
-io_getchar FDB serial_getchar
-io_putchar FDB serial_putchar
+io_initialise	EQU	serial_init
+io_getchar EQU serial_getchar
+io_putchar EQU serial_putchar
+
+;
+;	IO_INIT
+;	-------
+;	Initialise the I/O console subsystem
+;
+io_init
+	BRA io_initialise
+	RTS
 
 ;
 ;	IO_PUTS
@@ -21,7 +30,7 @@ io_puts
 io_putchar_next
 	LDA ,X+
 	BEQ io_puts_done
-	BSR [io_putchar]
+	BSR serial_putchar
 	BRA io_putchar_next
 io_puts_done
 	PULS A,X

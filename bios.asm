@@ -8,7 +8,7 @@
 	;
 	LDU #$A000
 	LDS #$B000
-	BRA main
+	LBRA main
 
 	;
 	;	Include drivers for everything
@@ -41,12 +41,16 @@ bios_startup_wait
 	;	Configure the RAM DAT page table
 	;
 	INCLUDE ram.asm
+	LBSR serial_init
 
 	;
 	;	Print the power-on message
 	;
-	LDX #bios_startup_message
+finish
+	LEAX bios_startup_message,pcr
 	LBSR	io_puts
+
+	BRA finish
 
 ;
 ;	6809 INTERRUPT VECTORS
