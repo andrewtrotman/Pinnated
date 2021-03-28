@@ -2,7 +2,7 @@
 ;	BIOS.ASM
 ;	--------
 ;
-	ORG $1000
+	ORG $F000
 	;
 	;	Initialise the stack and start
 	;
@@ -56,7 +56,7 @@ finish
 ;	6809 INTERRUPT VECTORS
 ;	----------------------
 ;
-	org $1FF0
+	org $FFF0
 
 vector_reserved
 	FDB $F000

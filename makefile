@@ -6,7 +6,8 @@ all: just_lcd.s9 just_serial.s9 just_ram_lcd.s9 just_ram.s9 bios.s9
 # Assumes CPU, ROM, RAM, 68B50 serial at 115200(N81)
 #
 bios.s9 : bios.asm io.asm serial.asm lcd.asm ram.asm
-	lwasm --format=srec --map=bios.map --list=bios.lst -o bios.s9 bios.asm
+	lwasm --format=srec --map=bios.map --list=bios.lst -o bios.F000 bios.asm
+	srec_cat bios.F000 -offset -0xE000 -o bios.s9
 
 write_bios:
 	minipro -p AT28C64 -w bios.s9
