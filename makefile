@@ -30,7 +30,8 @@ write_just_lcd:
 # Assumes CPU, ROM, 68B50 serial.  RAM not needed
 #
 just_serial.s9 : just_serial.asm
-	lwasm --format=srec --map=just_serial.map --list=just_serial.lst -o just_serial.s9 just_serial.asm
+	lwasm --format=srec --map=just_serial.map --list=just_serial.lst -o just_serial.F000 just_serial.asm
+	srec_cat just_serial.F000 -offset -0xE000 -o just_serial.s9
 
 write_just_serial:
 	minipro -p AT28C64 -w just_serial.s9

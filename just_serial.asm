@@ -8,7 +8,8 @@ serial_status_tdre		EQU %00000010
 serial_baud_rate_115200 EQU %00010110
 serial_reset EQU %00010111
 
-	ORG $1000
+start
+	ORG $F400
 	LDU #$B000
 	LDS #$C000
 
@@ -49,21 +50,21 @@ string_boot
 ;	6809 INTERRUPT VECTORS
 ;	----------------------
 ;
-	org $1FF0
+	org $FFF0
 
 vector_reserved
-	FDB $F000
+	FDB start
 vector_swi3
-	FDB $F000
+	FDB start
 vector_swi2
-	FDB $F000
+	FDB start
 vector_firq
-	FDB $F000
+	FDB start
 vector_irq
-	FDB $F000
+	FDB start
 vector_swi
-	FDB $F000
+	FDB start
 vector_nmi
-	FDB $F000
+	FDB start
 vector_reset
-	FDB $F000
+	FDB start

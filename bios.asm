@@ -2,7 +2,19 @@
 ;	BIOS.ASM
 ;	--------
 ;
-	ORG $F000
+
+;
+;	BASIC Interpreter
+;	-----------------
+;
+	ORG $F800
+	INCLUDE TinyBasic/basic.asm
+
+;
+;	BIOS
+;	----
+;
+BIOS
 	;
 	;	Initialise the stack and start
 	;
@@ -15,7 +27,7 @@
 	;
 	INCLUDE serial.asm
 	INCLUDE io.asm
-	INCLUDE lcd.asm
+;	INCLUDE lcd.asm
 
 	;
 	;	Strings and constants
@@ -41,6 +53,7 @@ bios_startup_wait
 	;	Configure the RAM DAT page table
 	;
 	INCLUDE ram.asm
+
 	LBSR serial_init
 
 	;
@@ -48,9 +61,9 @@ bios_startup_wait
 	;
 finish
 	LEAX bios_startup_message,pcr
-	LBSR	io_puts
-
-	BRA finish
+	LBSR io_puts
+	LBRA BASIC
+	LBRA finish
 
 ;
 ;	6809 INTERRUPT VECTORS
@@ -59,18 +72,18 @@ finish
 	org $FFF0
 
 vector_reserved
-	FDB $F000
+	FDB BIOS
 vector_swi3
-	FDB $F000
+	FDB BIOS
 vector_swi2
-	FDB $F000
+	FDB BIOS
 vector_firq
-	FDB $F000
+	FDB BIOS
 vector_irq
-	FDB $F000
+	FDB BIOS
 vector_swi
-	FDB $F000
+	FDB BIOS
 vector_nmi
-	FDB $F000
+	FDB BIOS
 vector_reset
-	FDB $F000
+	FDB BIOS
