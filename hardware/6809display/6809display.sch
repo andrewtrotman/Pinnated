@@ -828,34 +828,30 @@ NoConn ~ 9450 6050
 NoConn ~ 7650 6050
 NoConn ~ 5450 6700
 NoConn ~ 5450 7050
-NoConn ~ 5450 7750
-NoConn ~ 5450 7400
 $Comp
 L 74xx:74HC04 U1
 U 6 1 606F7EB3
-P 5150 7750
-F 0 "U1" H 5100 7800 50  0000 C CNN
-F 1 "74HC04" H 5100 7700 50  0000 C CNN
-F 2 "" H 5150 7750 50  0001 C CNN
-F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 5150 7750 50  0001 C CNN
-	6    5150 7750
+P 7250 5850
+F 0 "U1" H 7200 5900 50  0000 C CNN
+F 1 "74HC04" H 7200 5800 50  0000 C CNN
+F 2 "" H 7250 5850 50  0001 C CNN
+F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 7250 5850 50  0001 C CNN
+	6    7250 5850
 	1    0    0    -1  
 $EndComp
 $Comp
 L 74xx:74HC04 U1
 U 5 1 606F65D4
-P 5150 7400
-F 0 "U1" H 5100 7450 50  0000 C CNN
-F 1 "74HC04" H 5100 7350 50  0000 C CNN
-F 2 "" H 5150 7400 50  0001 C CNN
-F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 5150 7400 50  0001 C CNN
-	5    5150 7400
+P 6050 5750
+F 0 "U1" H 6000 5800 50  0000 C CNN
+F 1 "74HC04" H 6000 5700 50  0000 C CNN
+F 2 "" H 6050 5750 50  0001 C CNN
+F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 6050 5750 50  0001 C CNN
+	5    6050 5750
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
 	4850 6700 4850 7050
-Wire Wire Line
-	4850 7400 4850 7750
 Entry Wire Line
 	10750 1400 10850 1500
 Entry Wire Line
@@ -1068,25 +1064,25 @@ Text GLabel 9150 2300 0    50   Input ~ 0
 ~Read-Enable
 Text GLabel 7650 6150 0    50   Input ~ 0
 ~Read-Enable
-Text GLabel 6950 5750 0    50   Input ~ 0
+Text GLabel 5750 5750 0    50   Input ~ 0
 ~Slot-Select
 Entry Wire Line
-	6750 5950 6650 6050
-Text Label 6950 5950 2    50   ~ 0
+	6150 5950 6050 6050
+Text Label 6350 5950 2    50   ~ 0
 CA11
 Wire Wire Line
-	6950 5950 6750 5950
+	6350 5950 6150 5950
 Text Notes 8100 5300 0    50   ~ 0
 Teletext RAM\nText Page 1: E800-EBFF\nText Page 2: EC00-EFFF\n
 $Comp
 L 74xx:74LS08 U7
 U 1 1 6101C4B8
-P 7250 5850
-F 0 "U7" H 7250 5900 50  0000 C CNN
-F 1 "74HC08" H 7250 5800 50  0000 C CNN
-F 2 "" H 7250 5850 50  0001 C CNN
-F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 7250 5850 50  0001 C CNN
-	1    7250 5850
+P 6650 5850
+F 0 "U7" H 6650 5900 50  0000 C CNN
+F 1 "74HC08" H 6650 5800 50  0000 C CNN
+F 2 "" H 6650 5850 50  0001 C CNN
+F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 6650 5850 50  0001 C CNN
+	1    6650 5850
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -1398,8 +1394,6 @@ F 3 "~" H 9050 4200 50  0001 C CNN
 	1    9050 4200
 	1    0    0    -1  
 $EndComp
-Text GLabel 4850 7400 0    50   Input ~ 0
-+5v
 Wire Wire Line
 	7650 8250 7450 8250
 Wire Wire Line
@@ -1544,22 +1538,6 @@ Wire Wire Line
 	9050 4200 9150 4200
 Wire Wire Line
 	8950 4100 9050 4100
-Wire Bus Line
-	6650 6000 6650 6100
-Wire Bus Line
-	3600 2750 3600 3150
-Wire Bus Line
-	5600 4350 5600 5050
-Wire Bus Line
-	3750 2850 3750 3450
-Wire Bus Line
-	9750 7750 9750 8350
-Wire Bus Line
-	9700 6450 9700 7450
-Wire Bus Line
-	7350 6450 7350 8350
-Wire Bus Line
-	10850 1500 10850 3500
 $Comp
 L power:PWR_FLAG #FLG0101
 U 1 1 61A719D1
@@ -1574,4 +1552,20 @@ $EndComp
 Connection ~ 9050 4100
 Wire Wire Line
 	9050 4100 9150 4100
+Wire Bus Line
+	6050 6000 6050 6100
+Wire Bus Line
+	3600 2750 3600 3150
+Wire Bus Line
+	5600 4350 5600 5050
+Wire Bus Line
+	3750 2850 3750 3450
+Wire Bus Line
+	9750 7750 9750 8350
+Wire Bus Line
+	9700 6450 9700 7450
+Wire Bus Line
+	7350 6450 7350 8350
+Wire Bus Line
+	10850 1500 10850 3500
 $EndSCHEMATC
