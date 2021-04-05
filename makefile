@@ -1,16 +1,16 @@
-all: just_lcd.s9 just_serial.s9 just_ram_lcd.s9 just_ram.s9 bios.s9 ata_ide.s9
+all: just_lcd.s9 just_serial.s9 just_ram_lcd.s9 just_ram.s9 bios.s9 just_ata_ide.s9
 
 #
-# ATA_IDE
-# -------
+# JUST_ATA_IDE
+# ------------
 # Assumes CPU, ROM, RAM, 68B50 serial at 115200(N81), IDE disk controller
 #
-ata_ide.s9 : ata_ide.asm io.asm serial.asm lcd.asm ram.asm
-	lwasm --format=srec --map=ata_ide.map --list=ata_ide.lst -o ata_ide.F000 ata_ide.asm
-	srec_cat ata_ide.F000 -offset -0xE000 -o ata_ide.s9
+just_ata_ide.s9 : just_ata_ide.asm io.asm serial.asm lcd.asm ram.asm ata_ide.asm
+	lwasm --format=srec --map=just_ata_ide.map --list=just_ata_ide.lst -o just_ata_ide.F000 just_ata_ide.asm
+	srec_cat just_ata_ide.F000 -offset -0xE000 -o just_ata_ide.s9
 
-write_ata_ide:
-	minipro -p AT28C64 -w ata_ide.s9
+write_just_ata_ide:
+	minipro -p AT28C64 -w just_ata_ide.s9
 
 #
 # BIOS
