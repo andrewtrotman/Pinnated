@@ -206,9 +206,9 @@ Text GLabel 4200 2800 0    50   Output ~ 0
 ~R
 Text GLabel 4200 2900 0    50   Output ~ 0
 ~W
-Text GLabel 7200 2950 0    50   Input ~ 0
-~R
 Text GLabel 7200 3050 0    50   Input ~ 0
+~R
+Text GLabel 7200 2950 0    50   Input ~ 0
 ~W
 Text GLabel 4200 2200 0    50   Output ~ 0
 ~Reset
