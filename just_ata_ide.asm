@@ -66,11 +66,38 @@ PRTRNE
 * PRINT CF INFORMATION
 ********************************
 CFINFO
-
+; PRINT SERIAL
+	LDX	#BUFFER+20
+	LDB	#20
+	JSR	PRTRN
+	LDX	#TCRLF
+	LBSR	io_puts
+; PRINT FIRMWARE REV
+	LDX	#BUFFER+46
+	LDB	#8
+	JSR	PRTRN
+	LDX	#TCRLF
+	LBSR	io_puts
 ; PRINT MODEL NUMBER
 	LDX	#BUFFER+54
 	LDB	#40
-	BSR	PRTRN
+	JSR	PRTRN
+	LDX	#TCRLF
+	LBSR	io_puts
+; PRINT LBA SIZE
+	LDX	#BUFFER+123
+	LDA	,X
+	LEAX	-1,X
+	JSR	io_put_byte
+	LDA	,X
+	LEAX	-1,X
+	JSR	io_put_byte
+	LDA	,X
+	LEAX	-1,X
+	JSR	io_put_byte
+	LDA	,X
+	LEAX	-1,X
+	JSR	io_put_byte
 	LDX	#TCRLF
 	LBSR	io_puts
 
@@ -81,8 +108,6 @@ CFINFO
 	LDX	#BUFFER2
 	LBSR	io_dump_memory
 	RTS
-
-
 
 ;
 ;	MAIN
@@ -115,15 +140,13 @@ finish
 	LEAX init_message,pcr
 	LBSR io_puts
 
-	LBSR ata_ide_init
+	LBSR FLEX_INIT
 
 	LEAX info_message,pcr
 	LBSR io_puts
 
 	LDX #BUFFER
 	LBSR ata_ide_identify
-	TFR Y,X
-	LBSR io_put_word
 
 	LEAX done_message,pcr
 	LBSR io_puts
@@ -135,7 +158,7 @@ finish
 
 spin_lock
 	LDA	ata_ide_data
-	LBRA spin_lock
+	LBRA	spin_lock
 
 ;	LBRA finish
 
