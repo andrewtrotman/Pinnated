@@ -7,6 +7,14 @@
 ;
 FLEX_DRIVE_LAST					EQU $00
 
+
+;
+; Page 50 of the FLEX Adaptatopn Guide states:
+;		Track numbers always begin with #0 and sector numbers always begin with #1.
+; So there are at most 256 tracks each with 255 sectors on them!
+;
+
+
 ;
 ;	Registers
 ;
