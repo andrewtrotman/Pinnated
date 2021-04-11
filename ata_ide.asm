@@ -88,10 +88,13 @@ ata_ide_identify
 ;
 ;	FLEX_SECTOR_TO_LBA
 ;	------------------
-;	FLEX track and sector numbers are one byte.  FLEX sectors are 256 bytes.  So the largest
-;	FLEX volume is 16MB.  The smallest Compact Flash card I could find is 32MB.
-;	So we can treat the track/sector address as a 16-bit address, divide by 2, then check
-;	which half of a 512-byte IDE sector to use.
+;	FLEX track and sector numbers are one byte.
+;	FLEX track numbers count from 00-FF.
+;	FLEX sector numbers count from 01-FF.
+;  FLEX sectors are 256 bytes.
+;	So the largest FLEX volume is 16MB (well, 256*255*256 = 15.9375MB)
+;	The smallest Compact Flash card I could find is 32MB.
+;	So we'll use a disk geometory of 256 tracks of 255 sectors
 ;
 ;	On Entry:
 ;		(A) = Track Number
@@ -102,7 +105,14 @@ ata_ide_identify
 ;		    = 1 odd numbered sector (use secind 256 bytes of sector)
 ;
 FLEX_SECTOR_TO_LBA
-	LSRA
+	PSHS	B			; save B
+	LDB	#$00		; push 16-bit sector number onto the stack
+	PSHS	B
+	LDB	#255		; convert track number into LBA
+	MUL
+	ADDD	0,S++		; add the sector number, resulting in LBA being in D (A high byte, B low byte)
+
+	LSRA				; divide LBA by 2 to get the IDE track number and which half to use
 	BCC 	FLEX_SECTOR_TO_LBA_EVEN_TRACK
 	LSRB
 	ORB	#$80			; turn the high bit back on as its the "carry" from A/2
@@ -115,6 +125,8 @@ FLEX_SECTOR_TO_LBA_LOAD
 	CLR	ata_ide_cylinder_high
 	LDA	#$01
 	STA	ata_ide_sector_count
+
+	PULS	B
 	RTS
 
 ;

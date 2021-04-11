@@ -20,6 +20,8 @@ BIOS
 	;
 	LDU #$A000
 	LDS #$B000
+	LDA #$00
+	TFR A,DP
 	LBRA main
 
 	;
