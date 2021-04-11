@@ -23,8 +23,8 @@ SCTBUF EQU    $C300  DATA SECTOR BUFFER
 LOAD    BRA    LOAD0
 
         FCB    0,0,0
-TRK     FCB    0         FILE START TRACK
-SCT     FCB    0         FILE START SECTOR
+TRK     FCB    1         FILE START TRACK
+SCT     FCB    1         FILE START SECTOR
 DNS     FCB    0         DENSITY FLAG
 TADR    FDB    $C100     TRANSFER ADDRESS
 LADR    FDB    0         LOAD ADDRESS
@@ -50,13 +50,16 @@ LOAD2   BSR    GETCH     GET LOAD ADDRESS
         BSR    GETCH
         STA    LADR+1
         BSR    GETCH     GET BYTE COUNT
-        TAB              PUT IN B
+
+        TFR A,B          PUT IN B (ASPT: was TAB, but not supported.  Leventhal, p22-72 gives the equivelant)
+        TSTA
+
         BEQ    LOAD1     LOOP IF COUNT=0
         LDX    LADR      GET LOAD ADDRESS
 LOAD3   PSHS   B,X
         BSR    GETCH     GET A DATA CHARACTER
         PULS   B,X
-        STA    0,X+      PUT CHARACTER
+        STA    ,X+       PUT CHARACTER
         DECB             END OF DATA IN RECORD?
         BNE    LOAD3     LOOP IF NOT
         BRA    LOAD1     GET ANOTHER RECORD
@@ -66,12 +69,12 @@ LOAD3   PSHS   B,X
 GETCH   CMPY   #SCTBUF+256 OUT OF DATA?
         BNE    GETCH4    GO READ CHARACTER IF NOT
 GETCH2  LDX    #SCTBUF   POINT TO BUFFER
-        LDD    0,X       GET FORWARD LINK
+        LDD    ,X        GET FORWARD LINK
         BEQ    GO        IF ZERO, FILE IS LOADED
         BSR    READ      READ NEXT SECTOR
         BNE    LOAD      START OVER IF ERROR
         LDY    #SCTBUF+4 POINT PAST LINK
-GETCH4  LDA    0,Y+      ELSE, GET A CHARACTER
+GETCH4  LDA    ,Y+       ELSE, GET A CHARACTER
         RTS
 
 * FILE IS LOADED, JUMP TO IT
@@ -89,7 +92,13 @@ GO      JMP    [TADR]    JUMP TO TRANSFER ADDRESS
 * A,B,X, AND U MAY BE DESTROYED BY THIS ROUTINE,
 * BUT Y MUST-BE PRESERVED.
 
-READ    LDB    #$FF      MUST BE USER SUPPLIED!
-        RTS              THIS CODE DISABLES READ!
+FLEX_READ EQU  $DE00			; Assuming the FLEX disk drivers are already loaded by the BIOS
 
+READ
+        JSR    FLEX_READ
+        RTS
+;
+;        LDB    #$FF      MUST BE USER SUPPLIED!
+;        RTS              THIS CODE DISABLES READ!
+;
         END

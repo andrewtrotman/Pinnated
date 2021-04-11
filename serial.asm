@@ -27,12 +27,76 @@ serial_baud_rate_115200 EQU %00010110
 ;
 serial_reset EQU %00000011
 
+
+;
+;	FLEX_console_driver_vector_table
+;	--------------------------------
+;	This table is copied to $CD03 on startup and becomes the FLEX console driver vector table
+;
+FLEXWRM        EQU $CD03					;; FLEX warm start address
+FLEX_console_driver_vector_table_address EQU $D3E5
+FLEX_console_driver_vector_table
+INCHNE  FDB FLEX_INCHNE	; INPUT CHARACTER W/O ECHO
+IHNDLR  FDB FLEX_IHNDLR	; IRQ INTERRUPT HANDLER
+SWIVEC  FDB vector_swi	; SWI3 VECTOR LOCATION
+IRQVEC  FDB vector_irq	; IRQ VECTOR LOCATION
+TMOFF   FDB FLEX_TMOFF	; TIMER OFF ROUTINE
+TMON    FDB FLEX_TMON	; TIMER ON ROUTINE
+TMINT   FDB FLEX_TMINT	; TIMER INITIALIZATION
+MONITR  FDB FLEXWRM		; MONITOR ENTRY ADDRESS
+TINIT   FDB FLEX_TINIT	; TERMINAL INITIALIZATION
+STAT    FDB FLEX_STAT	; CHECK TERMINAL STATUS
+OUTCH   FDB FLEX_OUTCH	; OUTPUT CHARACTER
+INCH    FDB FLEX_INCH	; INPUT CHARACTER W/ ECHO
+FLEX_console_driver_vector_table_end
+
+;
+;	FLEX_IHNDLR
+;	-----------
+;
+FLEX_IHNDLR
+	RTI
+;
+;	FLEX_TMINT
+;	----------
+;
+FLEX_TMINT
+	; Fall through
+
+;
+;	FLEX_TMON
+;	---------
+;
+FLEX_TMON
+	; Fall through
+
+;
+;	FLEX_TMOFF
+;	----------
+;
+FLEX_TMOFF
+	RTS
+
 ;
 ;	SERIAL_INIT
 ;	-----------
 ;
 FLEX_TINIT		; TERMINAL INITIALIZATION
 serial_init
+	;
+	;	Copy the FLEX driver table into RAM
+	;
+	LDX	#FLEX_console_driver_vector_table
+	LDY	#FLEX_console_driver_vector_table_address
+FLEX_TINIT_COPY
+	LDA	,X+
+	STA	,Y+
+	CMPX	#FLEX_console_driver_vector_table_end
+	BNE	FLEX_TINIT_COPY
+
+	;
+	;	Initialise the serial interface
+	;
 	LDA #serial_reset
 	STA serial_control
 	LDA #serial_baud_rate_115200
@@ -44,6 +108,7 @@ serial_init
 ;	-----------
 ;	Check to see if a character is ready to be read, and if so then set
 FLEX_STAT		; CHECK TERMINAL STATUS
+serial_peek
 	PSHS A
 	LDA serial_status
 	BITA #serial_status_rdrf

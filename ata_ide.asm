@@ -42,6 +42,25 @@ ata_ide_status_drq				EQU $08
 ata_ide_status_err				EQU $01
 
 ;
+;	FLEX_disk_driver_routine_jump_table
+;	-----------------------------------
+;	This table is copied to $DE00 on startup and becomes the FLEX disk driver jump table
+;
+FLEX_disk_driver_routine_jump_table_address EQU $DE00
+FLEX_disk_driver_routine_jump_table
+	JMP	FLEX_READ
+	JMP	FLEX_WRITE
+	JMP	FLEX_VERIFY
+	JMP	FLEX_RESTORE
+	JMP	FLEX_DRIVE
+	JMP	FLEX_CHKRDY
+	JMP	FLEX_QUICK
+	JMP	FLEX_INIT
+	JMP	FLEX_WARM
+	JMP	FLEX_SEEK
+FLEX_disk_driver_routine_jump_table_end
+
+;
 ;	ATA_IDE_WAIT_FOR_NOT_BUSY
 ;	-------------------------
 ;	Spinlock until the BSY flag is clear
@@ -110,7 +129,7 @@ FLEX_SECTOR_TO_LBA
 	PSHS	B
 	LDB	#255		; convert track number into LBA
 	MUL
-	ADDD	0,S++		; add the sector number, resulting in LBA being in D (A high byte, B low byte)
+	ADDD	,S++		; add the sector number, resulting in LBA being in D (A high byte, B low byte)
 
 	LSRA				; divide LBA by 2 to get the IDE track number and which half to use
 	BCC 	FLEX_SECTOR_TO_LBA_EVEN_TRACK
@@ -197,6 +216,13 @@ FLEX_READ_DONE
 	CLRB
 	RTS
 
+
+;
+;	FLEX_WRITE
+;	----------
+;
+FLEX_WRITE
+	RTS
 ;
 ;	FLEX_DRIVE
 ;	----------
@@ -226,6 +252,20 @@ FLEX_DRIVE_MISSING
 ;	Driver initialize (cold start)
 ;
 FLEX_INIT
+	;
+	;	Copy the FLEX disk driver jump table into RAM
+	;
+	LDX	#FLEX_disk_driver_routine_jump_table
+	LDY	#FLEX_disk_driver_routine_jump_table_address
+FLEX_INIT_COPY
+	LDA	,X+
+	STA	,Y+
+	CMPX	#FLEX_disk_driver_routine_jump_table_end
+	BNE	FLEX_INIT_COPY
+
+	;
+	;	Initialise the IDE interface
+	;
 	LBSR	ata_ide_wait_for_not_busy
 	LBSR	ata_ide_wait_for_drdy
 

@@ -29,12 +29,12 @@ QLOAD           BRA  LOAD0
                 FCB 0,0,0
 TRK             FCB 1           FILE START TRACK
 SCT             FCB 1           FILE START SECTOR
-DNS             FCB 0           DENSITY FLAG (NOT USED)
+DNS             FCB 0           DENSITY FLAG
 LADR            FDB 0           LOAD ADDRESS
 
 LOAD0           LDS #STACK      SETUP STACK
                 LDX #SCTBUF     POINT TO FCB
-                CLR 3,X         MOCK UP FCB AS THO FOR DRIVE 0
+                CLR 3,X         SET FOR DRIVE 0
                 JSR DRIVE       SELECT DRIVE 0
                 LDX #SCTBUF
                 JSR RESTORE     NOW RESTORE TO TRACK 0
@@ -57,13 +57,16 @@ LOAD2           BSR GETCH       GET LOAD ADDRESS
                 BSR GETCH
                 STA LADR+1
                 BSR GETCH       GET BYTE COUNT
-                TAB             PUT IN B
+
+                TFR A,B         PUT IN B (ASPT: was TAB, but not supported.  Leventhal, p22-72 gives the equivelant)
+                TSTA
+
                 BEQ LOAD1       LOOP IF COUNT=0
                 LDX LADR        GET LOAD ADDRESS IN X
 LOAD3           PSHS B,X
                 BSR GETCH       GET A DATA CHARACTER
                 PULS B,X
-                STA 0,X+        PUT CHARACTER
+                STA ,X+         PUT CHARACTER
                 DECB            END OF DATA IN RECORD
                 BNE LOAD3       LOOP IF NOT
                 BRA LOAD1       GET ANOTHER RECORD
@@ -73,12 +76,12 @@ LOAD3           PSHS B,X
 GETCH           CMPY #SCTBUF+256 OUT OF DATA?
                 BNE GETCH4      GO READ CHARACTER IF NOT
 GETCH2          LDX #SCTBUF     POINT TO BUFFER
-                LDD 0,X         GET FORWARD LINK
+                LDD ,X          GET FORWARD LINK
                 BEQ GO          IF ZERO, FILE IS LOADED
                 JSR READ        READ NEXT SECTOR
                 BNE QLOAD       START OVER IF ERROR
                 LDY #SCTBUF+4   POINT PAST LINK
-GETCH4          LDA 0,Y+        ELSE, GET A CHARACTER
+GETCH4          LDA ,Y+         ELSE, GET A CHARACTER
                 RTS
 
 * FILE IS LOADED, RETURN TO MONITOR
