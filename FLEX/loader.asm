@@ -44,7 +44,6 @@ LOAD1   BSR    GETCH     GET A CHARACTER
         STA    TADR
         BSR    GETCH
         STA    TADR+1
-
         BRA    LOAD1     CONTINUE LOAD
 LOAD2   BSR    GETCH     GET LOAD ADDRESS
         STA    LADR
@@ -92,5 +91,5 @@ GO      JMP    [TADR]    JUMP TO TRANSFER ADDRESS
 
 READ    LDB    #$FF      MUST BE USER SUPPLIED!
         RTS              THIS CODE DISABLES READ!
-        
+
         END
