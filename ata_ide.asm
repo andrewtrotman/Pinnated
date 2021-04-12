@@ -29,7 +29,8 @@ ata_ide_disk_head					EQU	ata_ide_data+6
 ata_ide_status						EQU	ata_ide_data+7
 ata_ide_command					EQU	ata_ide_data+7
 
-ata_ide_command_reset			EQU	$04	;REALLY? - check this, should be $08?
+;ata_ide_command_reset			EQU	$04	;REALLY? - check this, should be $08?
+ata_ide_command_reset			EQU	$08	;REALLY? - check this, should be $08?
 ata_ide_command_read_sector	EQU	$20	; read a single sector
 ata_ide_command_identfy			EQU	$EC
 ata_ide_command_set_feature	EQU	$EF	; set feature
@@ -95,13 +96,15 @@ ata_ide_wait_for_drdy_loop
 ;	Return the number of bytes read in Y
 ;
 ata_ide_identify
+	PSHS	A
 	BSR	ata_ide_wait_for_not_busy
 	BSR	ata_ide_wait_for_drdy
 	LDA	#ata_ide_command_identfy
 	STA	ata_ide_command
 	BSR	ata_ide_wait_for_not_busy
-	BSR	FLEX_READ_256
-	BSR	FLEX_READ_256
+	LBSR	FLEX_READ_256
+	LBSR	FLEX_READ_256
+	PULS	A
 	RTS
 
 ;
@@ -121,16 +124,16 @@ ata_ide_identify
 ;	On Exit:
 ;		LBA registers loaded
 ;		(C) = 0 even numbered sector (use first 256 bytes of IDE sector)
-;		    = 1 odd numbered sector (use secind 256 bytes of sector)
+;		    = 1 odd numbered sector (use second 256 bytes of sector)
 ;
 FLEX_SECTOR_TO_LBA
+	DECB				; because FLEX sectors count from 1, and we count from 0
 	PSHS	B			; save B
-	LDB	#$00		; push 16-bit sector number onto the stack
+	CLRB				; push 16-bit sector number onto the stack
 	PSHS	B
 	LDB	#255		; convert track number into LBA
 	MUL
-	ADDD	,S++		; add the sector number, resulting in LBA being in D (A high byte, B low byte)
-
+	ADDD	,S			; add the sector number, resulting in LBA being in D (A high byte, B low byte)
 	LSRA				; divide LBA by 2 to get the IDE track number and which half to use
 	BCC 	FLEX_SECTOR_TO_LBA_EVEN_TRACK
 	LSRB
@@ -141,10 +144,12 @@ FLEX_SECTOR_TO_LBA_EVEN_TRACK
 FLEX_SECTOR_TO_LBA_LOAD
 	STB	ata_ide_sector_number
 	STA	ata_ide_cylinder_low
-	CLR	ata_ide_cylinder_high
+	LDA	#$00
+	STA	ata_ide_cylinder_high
 	LDA	#$01
 	STA	ata_ide_sector_count
 
+	PULS	B
 	PULS	B
 	RTS
 
@@ -155,29 +160,12 @@ FLEX_SECTOR_TO_LBA_LOAD
 ;	Read 256 bytes from the ATA/IDE controller into the memory pointed to by X
 ;
 FLEX_READ_256
-	LDB	#$00
+	CLRB
 FLEX_READ_256_MORE
 	LDA	ata_ide_data
 	STA	,X+
 	DECB
-	BEQ	FLEX_READ_256_DONE
-	BRA	FLEX_READ_256_MORE
-FLEX_READ_256_DONE
-	RTS
-
-;
-;	FLEX_DISCARD_256
-;	----------------
-;	Read and discard 256 bytes from the ATA/IDE controller
-;
-FLEX_DISCARD_256
-	LDB	#$00
-FLEX_DISCARD_256_MORE
-	LDA	ata_ide_data
-	DECB
-	BEQ	FLEX_DISCARD_256_DONE
-	BRA	FLEX_DISCARD_256_MORE
-FLEX_DISCARD_256_DONE
+	BNE	FLEX_READ_256_MORE
 	RTS
 
 ;
@@ -195,27 +183,46 @@ FLEX_DISCARD_256_DONE
 ;		(Z) = 1 if no error
 ;		    = 0 if an error
 ;
+;	FLEX track numbers count from 00-FF.
+;	FLEX sector numbers count from 01-FF.
+;
 FLEX_READ
-	BSR	ata_ide_wait_for_not_busy
-	BSR	ata_ide_wait_for_drdy
-	BSR	FLEX_SECTOR_TO_LBA
-	PSHS	CC
+	LBSR 	io_put_word_D
+	LBSR	ata_ide_wait_for_not_busy
+	LBSR	ata_ide_wait_for_drdy
+	LBSR	FLEX_SECTOR_TO_LBA
+	BCS	FLEX_READ_ODD_SECTOR
+
+FLEX_READ_EVEN_SECTOR
+	PSHS	X
+	LEAX	even_message,pcr
+	LBSR 	io_puts
+	PULS	X
+
 	LDA	#ata_ide_command_read_sector
 	STA	ata_ide_command
-	BSR	ata_ide_wait_for_not_busy
-	PULS	CC
-	BCC	FLEX_READ_ODD_SECTOR
-FLEX_READ_EVEN_SECTOR
-	BSR	FLEX_READ_256
-	BSR	FLEX_DISCARD_256
-	BRA	FLEX_READ_DONE
+	LBSR	ata_ide_wait_for_not_busy
+	LBSR	FLEX_READ_256
+	LDX	#$F000				;; discard second half of IDE sector by writing it to ROM
+	LBSR	FLEX_READ_256
+	CLRB
+	RTS
 FLEX_READ_ODD_SECTOR
-	BSR	FLEX_DISCARD_256
-	BSR	FLEX_READ_256
+	PSHS	X
+	LEAX	odd_message,pcr
+	LBSR 	io_puts
+	PULS	X
+
+	PSHS	X
+	LDA	#ata_ide_command_read_sector
+	STA	ata_ide_command
+	LBSR	ata_ide_wait_for_not_busy
+	LBSR	FLEX_READ_256		;; discard first half of IDE sector by writing the second half over it
+	PULS	X
+	LBSR	FLEX_READ_256
 FLEX_READ_DONE
 	CLRB
 	RTS
-
 
 ;
 ;	FLEX_WRITE
@@ -354,4 +361,19 @@ FLEX_QUICK
 ;		    = 1 if not ready
 FLEX_CHKRDY
 	CLRB
+	RTS
+
+
+
+;
+;	IO_PUT_WORD_D
+;	-------------
+;	Print the value of accumulator D as a four nybble number
+;
+io_put_word_D
+	PSHS 	D
+	LBSR 	io_put_byte
+	TFR 	B,A
+	LBSR 	io_put_byte
+	PULS 	D
 	RTS

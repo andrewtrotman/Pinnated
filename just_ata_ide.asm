@@ -12,11 +12,10 @@ BOOT
 	;
 	;	Initialise the stack and start
 	;
-BUFFER	EQU	$8000
-BUFFER2	EQU	BUFFER+$100
+BUFFER	EQU	$C100
 
 	LDU #$A000
-	LDS #$B000
+	LDS #$8000
 	LBRA main
 
 	;
@@ -31,15 +30,23 @@ BUFFER2	EQU	BUFFER+$100
 	;
 	PRAGMA cescapes
 bios_startup_message
-	FCN "Pinnated 6809\n"
+	FCN "Pinnated 6809\r\n"
 init_message
-	FCN "Initialise\n"
+	FCN "Initialise\r\n"
 info_message
-	FCN "Getinfo\n"
+	FCN "Getinfo\r\n"
+sector_message
+	FCN "GetSector\r\n"
 done_message
-	FCN "Done\n"
+	FCN "Done\r\n"
+odd_message
+	FCN " - odd\r\n"
+even_message
+	FCN " - even\r\n"
+boot_message
+	FCN "TRY FLEX\r\n"
 TCRLF
-	FCN "\n"
+	FCN "\r\n"
 
 
 ********************************
@@ -105,7 +112,7 @@ CFINFO
 	LDX	#BUFFER
 	LBSR	io_dump_memory
 
-	LDX	#BUFFER2
+	LDX	#BUFFER+$100
 	LBSR	io_dump_memory
 	RTS
 
@@ -155,6 +162,61 @@ finish
 
 	LEAX TCRLF,pcr
 	LBSR io_puts
+
+;
+;	SIR
+;
+	LEAX sector_message,pcr
+	LBSR io_puts
+	LDX #BUFFER
+	LDA #$00
+	LDB #$03
+	LBSR FLEX_READ
+	LEAX TCRLF,pcr
+	LBSR io_puts
+	LDX	#BUFFER
+	LBSR	io_dump_memory
+	LEAX TCRLF,pcr
+	LBSR io_puts
+;
+;	DIRECTORY
+;
+	LEAX sector_message,pcr
+	LBSR io_puts
+	LDX #BUFFER
+	LDA #$00
+	LDB #$05
+	LBSR FLEX_READ
+	LEAX TCRLF,pcr
+	LBSR io_puts
+	LDX	#BUFFER
+	LBSR	io_dump_memory
+	LEAX TCRLF,pcr
+	LBSR io_puts
+	LEAX sector_message,pcr
+	LBSR io_puts
+	LDX #BUFFER
+	LDA #$00
+	LDB #$06
+	LBSR FLEX_READ
+	LEAX TCRLF,pcr
+	LBSR io_puts
+	LDX	#BUFFER
+	LBSR	io_dump_memory
+	LEAX TCRLF,pcr
+	LBSR io_puts
+
+;
+;	try booting
+;
+	LEAX boot_message,pcr
+	LBSR io_puts
+	LDX #BUFFER
+	LDA #$00
+	LDB #$01
+	LBSR FLEX_READ
+	JMP $C100
+
 
 spin_lock
 	LDA	ata_ide_data

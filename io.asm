@@ -75,7 +75,7 @@ io_put_byte
 ;
 ;	IO_PUT_WORD
 ;	-----------
-;	Print the value of accumulator X as a four nybble number
+;	Print the value of register X as a four nybble number
 ;
 io_put_word
 	PSHS 	X,D
