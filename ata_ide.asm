@@ -4,9 +4,6 @@
 ;	Methods to fread and write via ATA/IDE interface (8-bit)
 ;
 
-;
-FLEX_DRIVE_LAST					EQU $00
-
 
 ;
 ; Page 50 of the FLEX Adaptatopn Guide states:
@@ -29,9 +26,8 @@ ata_ide_disk_head					EQU	ata_ide_data+6
 ata_ide_status						EQU	ata_ide_data+7
 ata_ide_command					EQU	ata_ide_data+7
 
-;ata_ide_command_reset			EQU	$04	;REALLY? - check this, should be $08?
-ata_ide_command_reset			EQU	$08	;REALLY? - check this, should be $08?
 ata_ide_command_read_sector	EQU	$20	; read a single sector
+ata_ide_command_write_sector	EQU	$30	; write a single sector
 ata_ide_command_identfy			EQU	$EC
 ata_ide_command_set_feature	EQU	$EF	; set feature
 
@@ -127,33 +123,26 @@ ata_ide_identify
 ;		    = 1 odd numbered sector (use second 256 bytes of sector)
 ;
 FLEX_SECTOR_TO_LBA
-	DECB				; because FLEX sectors count from 1, and we count from 0
+	DECB				; because FLEX sectors count from 1, but ata/ide counts from 0
 	PSHS	B			; save B
 	CLRB				; push 16-bit sector number onto the stack
 	PSHS	B
-	LDB	#255		; convert track number into LBA
+	LDB	#254		; convert track number into LBA
 	MUL
 	ADDD	,S			; add the sector number, resulting in LBA being in D (A high byte, B low byte)
-	LSRA				; divide LBA by 2 to get the IDE track number and which half to use
-	BCC 	FLEX_SECTOR_TO_LBA_EVEN_TRACK
-	LSRB
-	ORB	#$80			; turn the high bit back on as its the "carry" from A/2
-	BRA	FLEX_SECTOR_TO_LBA_LOAD
-FLEX_SECTOR_TO_LBA_EVEN_TRACK
-	LSRB
-FLEX_SECTOR_TO_LBA_LOAD
-	STB	ata_ide_sector_number
+
+	STB	ata_ide_sector_number	; write to the LBA registers
 	STA	ata_ide_cylinder_low
 	LDA	#$00
 	STA	ata_ide_cylinder_high
-	LDA	#$01
+
+	LDA	#$01							; read / write one sector
 	STA	ata_ide_sector_count
 
 	PULS	B
 	PULS	B
 	RTS
 
-;
 ;
 ;	FLEX_READ_256
 ;	-------------
@@ -164,6 +153,20 @@ FLEX_READ_256
 FLEX_READ_256_MORE
 	LDA	ata_ide_data
 	STA	,X+
+	DECB
+	BNE	FLEX_READ_256_MORE
+	RTS
+
+;
+;	FLEX_WRITE_256
+;	--------------
+;	Write 256 bytes to the ATA/IDE controller from the memory pointed to by X
+;
+FLEX_WRITE_256
+	CLRB
+FLEX_WRITE_256_MORE
+	LDA	,X+
+	STA	ata_ide_data
 	DECB
 	BNE	FLEX_READ_256_MORE
 	RTS
@@ -187,38 +190,52 @@ FLEX_READ_256_MORE
 ;	FLEX sector numbers count from 01-FF.
 ;
 FLEX_READ
-	LBSR	ata_ide_wait_for_not_busy
-	LBSR	ata_ide_wait_for_drdy
-	LBSR	FLEX_SECTOR_TO_LBA
-	BCS	FLEX_READ_ODD_SECTOR
+	LBSR	ata_ide_wait_for_not_busy		; wait until not busy
+	LBSR	ata_ide_wait_for_drdy			; wait until drive ready
+	LBSR	FLEX_SECTOR_TO_LBA				; write the track and sector numbers to the LBA regisgers
 
-FLEX_READ_EVEN_SECTOR
-	LDA	#ata_ide_command_read_sector
+	LDA	#ata_ide_command_read_sector	; issue the command
 	STA	ata_ide_command
-	LBSR	ata_ide_wait_for_not_busy
-	LBSR	FLEX_READ_256
-	LDX	#$F000				;; discard second half of IDE sector by writing it to ROM
-	LBSR	FLEX_READ_256
-	CLRB
-	RTS
-FLEX_READ_ODD_SECTOR
-	PSHS	X
-	LDA	#ata_ide_command_read_sector
-	STA	ata_ide_command
-	LBSR	ata_ide_wait_for_not_busy
-	LBSR	FLEX_READ_256		;; discard first half of IDE sector by writing the second half over it
-	PULS	X
-	LBSR	FLEX_READ_256
-FLEX_READ_DONE
-	CLRB
+
+	LBSR	ata_ide_wait_for_not_busy		; wait until not busy
+	LBSR	FLEX_READ_256						; read the first 256 bytes
+	LDX	#$F000								; discard second half of IDE sector by writing it to ROM
+	LBSR	FLEX_READ_256						; read the second 256 bytes
+	CLRB											; set the FLEX success condition state
 	RTS
 
 ;
 ;	FLEX_WRITE
 ;	----------
 ;
+;	On Entry:
+;		(X) = Address of 256 memory buffer containing data to be written to disk
+;		(A) = Track Number
+;		(B) = Sector Number
+;	On Exit:
+;		(X) May be destroyed
+;		(A) May be destroyed
+;		(B) = Error condition
+;		(Z) = 1 if no error
+;		    = 0 if an error
+;
 FLEX_WRITE
+	LBSR	ata_ide_wait_for_not_busy		; wait until not busy
+	LBSR	ata_ide_wait_for_drdy			; wait until drive ready
+	LBSR	FLEX_SECTOR_TO_LBA				; write the track and sector numbers to the LBA regisgers
+
+	LDA	#ata_ide_command_write_sector	; issue the command
+	STA	ata_ide_command
+
+	LBSR	ata_ide_wait_for_not_busy		; wait until not busy
+
+	PSHS	X
+	LBSR	FLEX_WRITE_256						; read the first 256 bytes
+	PULS	X
+	LBSR	FLEX_WRITE_256						; read the second 256 bytes
+	CLRB											; set the FLEX success condition state
 	RTS
+
 ;
 ;	FLEX_DRIVE
 ;	----------
@@ -233,13 +250,21 @@ FLEX_WRITE
 ;
 FLEX_DRIVE
 	LDA	$03,X						; load the drive number from the FCB
-	CMPA	#FLEX_DRIVE_LAST
-	BGT	FLEX_DRIVE_MISSING
+	BEQ	FLEX_DRIVE_ZERO
+	CMPA	#$01
+	BEQ	FLEX_DRIVE_ONE
+	LDB	#$1F						; load with fail state before we set the flags (next line)
+	ASRB								; set B=$0F, Z=0, and C=1
+	RTS
+FLEX_DRIVE_ZERO
+	LDA	#$E0						; LBA mode, drive 0
+	STA	ata_ide_disk_head
 	CLRB								; set B=$00, Z=1, and C=0
 	RTS
-FLEX_DRIVE_MISSING
-	LDB	#$1F
-	ASRB								; set B=$0F, Z=0, and C=1
+FLEX_DRIVE_ONE
+	LDA	#$F0						; LBA mode, drive 1
+	STA	ata_ide_disk_head
+	CLRB								; set B=$00, Z=1, and C=0
 	RTS
 
 ;
@@ -262,17 +287,16 @@ FLEX_INIT_COPY
 	;
 	;	Initialise the IDE interface
 	;
-	LBSR	ata_ide_wait_for_not_busy
-	LBSR	ata_ide_wait_for_drdy
+	LDA	#$E0		; LBA3=0, MASTER, MODE=LBA
+	STA	ata_ide_disk_head
 
-	LDA	#ata_ide_command_reset
-	STA	ata_ide_command
-	LBSR	ata_ide_wait_for_not_busy
+	LBSR	ata_ide_wait_for_not_busy		; wait until not busy
+	LBSR	ata_ide_wait_for_drdy			; wait until drive ready
 
 	LDA	#$E0		; LBA3=0, MASTER, MODE=LBA
 	STA	ata_ide_disk_head
 
-	LDA	#ata_ide_feature_8_bit
+	LDA	#ata_ide_feature_8_bit			; 8-bit I/O
 	STA	ata_ide_feature
 	LDA	#ata_ide_command_set_feature
 	STA	ata_ide_command
@@ -322,7 +346,8 @@ FLEX_RESTORE
 ;		    = 0 if an error
 ;
 FLEX_SEEK
-	;	Fall through
+	CLRB
+	RTS
 
 ;
 ;	FLEX_QUICK
@@ -348,7 +373,19 @@ FLEX_QUICK
 ;		    = 0 if not ready
 ;		(C) = 0 if drive ready
 ;		    = 1 if not ready
+;
+;	Read the disk head register and make sure the compulsory set bits are set
+;	if they are then the device must be connected - and is therefore ready.
+;
 FLEX_CHKRDY
+	LDA	ata_ide_disk_head
+	ANDA	#$E0
+	CMPA	#$E0
+	BEQ	FLEX_CHKRDY_READY
+	LDA	#%00000001			; EFHINZVC
+	TFR	A,CC
+	RTS
+FLEX_CHKRDY_READY
 	CLRB
 	RTS
 	
