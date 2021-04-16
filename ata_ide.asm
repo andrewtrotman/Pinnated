@@ -187,18 +187,12 @@ FLEX_READ_256_MORE
 ;	FLEX sector numbers count from 01-FF.
 ;
 FLEX_READ
-	LBSR 	io_put_word_D
 	LBSR	ata_ide_wait_for_not_busy
 	LBSR	ata_ide_wait_for_drdy
 	LBSR	FLEX_SECTOR_TO_LBA
 	BCS	FLEX_READ_ODD_SECTOR
 
 FLEX_READ_EVEN_SECTOR
-	PSHS	X
-	LEAX	even_message,pcr
-	LBSR 	io_puts
-	PULS	X
-
 	LDA	#ata_ide_command_read_sector
 	STA	ata_ide_command
 	LBSR	ata_ide_wait_for_not_busy
@@ -208,11 +202,6 @@ FLEX_READ_EVEN_SECTOR
 	CLRB
 	RTS
 FLEX_READ_ODD_SECTOR
-	PSHS	X
-	LEAX	odd_message,pcr
-	LBSR 	io_puts
-	PULS	X
-
 	PSHS	X
 	LDA	#ata_ide_command_read_sector
 	STA	ata_ide_command
@@ -362,18 +351,4 @@ FLEX_QUICK
 FLEX_CHKRDY
 	CLRB
 	RTS
-
-
-
-;
-;	IO_PUT_WORD_D
-;	-------------
-;	Print the value of accumulator D as a four nybble number
-;
-io_put_word_D
-	PSHS 	D
-	LBSR 	io_put_byte
-	TFR 	B,A
-	LBSR 	io_put_byte
-	PULS 	D
-	RTS
+	
