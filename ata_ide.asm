@@ -89,7 +89,6 @@ ata_ide_wait_for_drdy_loop
 ;	ATA_IDE_IDENTIFY
 ;	----------------
 ;	Load the device identify information into a 512-byte block pointed to by X
-;	Return the number of bytes read in Y
 ;
 ata_ide_identify
 	PSHS	A
@@ -168,7 +167,7 @@ FLEX_WRITE_256_MORE
 	LDA	,X+
 	STA	ata_ide_data
 	DECB
-	BNE	FLEX_READ_256_MORE
+	BNE	FLEX_WRITE_256_MORE
 	RTS
 
 ;
@@ -205,6 +204,20 @@ FLEX_READ
 	RTS
 
 ;
+;	FLEX_WRITE_256
+;	--------------
+;	Write 256 bytes to the ATA/IDE controller from the memory pointed to by X
+;
+FLEX_WRITE_256_B
+	CLRB
+FLEX_WRITE_256_B_MORE
+	LDA	,X+
+	STA	ata_ide_data
+	DECB
+	BNE	FLEX_WRITE_256_B_MORE
+	RTS
+
+;
 ;	FLEX_WRITE
 ;	----------
 ;
@@ -230,9 +243,9 @@ FLEX_WRITE
 	LBSR	ata_ide_wait_for_not_busy		; wait until not busy
 
 	PSHS	X
-	LBSR	FLEX_WRITE_256						; read the first 256 bytes
+	LBSR	FLEX_WRITE_256_B					; read the first 256 bytes
 	PULS	X
-	LBSR	FLEX_WRITE_256						; read the second 256 bytes
+	LBSR	FLEX_WRITE_256_B					; read the second 256 bytes
 	CLRB											; set the FLEX success condition state
 	RTS
 
