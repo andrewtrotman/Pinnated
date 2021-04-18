@@ -116,13 +116,13 @@ io_dump_memory_16_more_bytes
 	LDB	#$10
 io_dump_memory_16_more_chars
 	LDA 	,X+
-	CMPA	#$20		; is ASCII ' ' or latr
+	CMPA	#$20		; is ASCII ' ' or later
 	BGE	io_dump_memory_16_printable
-	LDA	'.'
+	LDA	#'.'
 io_dump_memory_16_printable
 	CMPA	#$80
 	BLO	io_dump_memory_16_print
-	LDA	'.'
+	LDA	#'.'
 io_dump_memory_16_print
 	BSR 	io_putchar
 	DECB

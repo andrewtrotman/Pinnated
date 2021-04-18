@@ -142,6 +142,13 @@ FLEX_SECTOR_TO_LBA
 	PULS	B
 	RTS
 
+
+
+
+;(a ∧ b) ∨ (¬ a ∧ ¬ b) ∨ c
+
+;OR(OR(AND(A2,B2),AND(NOT(A2),NOT(B2)),C2))
+
 ;
 ;	FLEX_READ_256
 ;	-------------
