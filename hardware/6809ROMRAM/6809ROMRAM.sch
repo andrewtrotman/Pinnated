@@ -1192,7 +1192,7 @@ F 1 "0.1uF" H 5050 7500 50  0000 L CNN
 F 2 "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm" H 5150 7550 50  0001 C CNN
 F 3 "~" H 5150 7550 50  0001 C CNN
 	1    5150 7550
-	1    0    0    -1  
+	-1   0    0    1   
 $EndComp
 $Comp
 L Device:C_Small C3
@@ -1203,7 +1203,7 @@ F 1 "0.1uF" H 5300 7500 50  0000 L CNN
 F 2 "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm" H 5400 7550 50  0001 C CNN
 F 3 "~" H 5400 7550 50  0001 C CNN
 	1    5400 7550
-	1    0    0    -1  
+	-1   0    0    1   
 $EndComp
 $Comp
 L Device:C_Small C4
@@ -1214,18 +1214,7 @@ F 1 "0.1uF" H 5550 7500 50  0000 L CNN
 F 2 "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm" H 5650 7550 50  0001 C CNN
 F 3 "~" H 5650 7550 50  0001 C CNN
 	1    5650 7550
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:C_Small C5
-U 1 1 6115D68F
-P 5900 7550
-F 0 "C5" H 5800 7600 50  0000 L CNN
-F 1 "0.1uF" H 5800 7500 50  0000 L CNN
-F 2 "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm" H 5900 7550 50  0001 C CNN
-F 3 "~" H 5900 7550 50  0001 C CNN
-	1    5900 7550
-	1    0    0    -1  
+	-1   0    0    1   
 $EndComp
 $Comp
 L Device:C_Small C6
@@ -1236,7 +1225,7 @@ F 1 "0.1uF" H 6050 7500 50  0000 L CNN
 F 2 "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm" H 6150 7550 50  0001 C CNN
 F 3 "~" H 6150 7550 50  0001 C CNN
 	1    6150 7550
-	1    0    0    -1  
+	-1   0    0    1   
 $EndComp
 $Comp
 L Device:C_Small C7
@@ -1247,7 +1236,7 @@ F 1 "0.1uF" H 6300 7500 50  0000 L CNN
 F 2 "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm" H 6400 7550 50  0001 C CNN
 F 3 "~" H 6400 7550 50  0001 C CNN
 	1    6400 7550
-	1    0    0    -1  
+	-1   0    0    1   
 $EndComp
 Wire Wire Line
 	6400 7450 6150 7450
@@ -1260,12 +1249,7 @@ Wire Wire Line
 Connection ~ 5650 7450
 Wire Wire Line
 	5650 7450 5400 7450
-Connection ~ 5900 7450
-Wire Wire Line
-	5900 7450 5650 7450
 Connection ~ 6150 7450
-Wire Wire Line
-	6150 7450 5900 7450
 Wire Wire Line
 	4900 7650 5150 7650
 Connection ~ 5150 7650
@@ -1275,11 +1259,6 @@ Connection ~ 5400 7650
 Wire Wire Line
 	5400 7650 5650 7650
 Connection ~ 5650 7650
-Wire Wire Line
-	5650 7650 5900 7650
-Connection ~ 5900 7650
-Wire Wire Line
-	5900 7650 6150 7650
 Connection ~ 6150 7650
 Wire Wire Line
 	6150 7650 6400 7650
@@ -1387,7 +1366,7 @@ F 1 "0.1uF" H 6550 7500 50  0000 L CNN
 F 2 "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm" H 6650 7550 50  0001 C CNN
 F 3 "~" H 6650 7550 50  0001 C CNN
 	1    6650 7550
-	1    0    0    -1  
+	-1   0    0    1   
 $EndComp
 Wire Wire Line
 	6400 7450 6650 7450
@@ -1510,6 +1489,82 @@ NoConn ~ 10200 5800
 NoConn ~ 10200 6100
 Text Notes 650  900  0    50   ~ 0
 Can either be 128Kx8 RAM or 2x 32Kx8 ROM+64Kx8 RAM\nFor 128Kx8 use just the 628128 (U1) on its own.\nFor ROM+RAM use all except U1
+$Comp
+L aspt:Pinnated Logo1
+U 1 1 6085CEAD
+P 2900 7450
+F 0 "Logo1" H 2925 7496 50  0001 L CNN
+F 1 "Pinnated" H 2925 7405 50  0000 L CNN
+F 2 "Pinnated:Pinnule" H 2900 7450 50  0001 C CNN
+F 3 "" H 2900 7450 50  0001 C CNN
+	1    2900 7450
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H3
+U 1 1 608AEDA7
+P 3050 7200
+F 0 "H3" H 3150 7200 50  0000 L CNN
+F 1 "MountingHole" H 3150 7155 50  0001 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3_ISO14580_Pad" H 3050 7200 50  0001 C CNN
+F 3 "~" H 3050 7200 50  0001 C CNN
+	1    3050 7200
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H4
+U 1 1 608B0027
+P 3050 7350
+F 0 "H4" H 3150 7350 50  0000 L CNN
+F 1 "MountingHole" H 3150 7305 50  0001 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3_ISO14580_Pad" H 3050 7350 50  0001 C CNN
+F 3 "~" H 3050 7350 50  0001 C CNN
+	1    3050 7350
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H2
+U 1 1 608C2F83
+P 3050 7050
+F 0 "H2" H 3150 7050 50  0000 L CNN
+F 1 "MountingHole" H 3150 7005 50  0001 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3_ISO14580_Pad" H 3050 7050 50  0001 C CNN
+F 3 "~" H 3050 7050 50  0001 C CNN
+	1    3050 7050
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H1
+U 1 1 608D5285
+P 3050 6900
+F 0 "H1" H 3150 6900 50  0000 L CNN
+F 1 "MountingHole" H 3150 6855 50  0001 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3_ISO14580_Pad" H 3050 6900 50  0001 C CNN
+F 3 "~" H 3050 6900 50  0001 C CNN
+	1    3050 6900
+	1    0    0    -1  
+$EndComp
+Connection ~ 5900 7650
+Wire Wire Line
+	5900 7650 6150 7650
+Wire Wire Line
+	5650 7650 5900 7650
+Wire Wire Line
+	6150 7450 5900 7450
+Wire Wire Line
+	5900 7450 5650 7450
+Connection ~ 5900 7450
+$Comp
+L Device:C_Small C5
+U 1 1 6115D68F
+P 5900 7550
+F 0 "C5" H 5800 7600 50  0000 L CNN
+F 1 "0.1uF" H 5800 7500 50  0000 L CNN
+F 2 "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm" H 5900 7550 50  0001 C CNN
+F 3 "~" H 5900 7550 50  0001 C CNN
+	1    5900 7550
+	-1   0    0    1   
+$EndComp
 Wire Bus Line
 	3850 6500 3850 6600
 Wire Bus Line
