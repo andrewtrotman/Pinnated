@@ -4,13 +4,11 @@
 ;	Methods to fread and write via ATA/IDE interface (8-bit)
 ;
 
-
 ;
 ; Page 50 of the FLEX Adaptatopn Guide states:
 ;		Track numbers always begin with #0 and sector numbers always begin with #1.
 ; So there are at most 256 tracks each with 255 sectors on them!
 ;
-
 
 ;
 ;	Registers
@@ -141,13 +139,6 @@ FLEX_SECTOR_TO_LBA
 	PULS	B
 	PULS	B
 	RTS
-
-
-
-
-;(a ∧ b) ∨ (¬ a ∧ ¬ b) ∨ c
-
-;OR(OR(AND(A2,B2),AND(NOT(A2),NOT(B2)),C2))
 
 ;
 ;	FLEX_READ_256
