@@ -39,12 +39,6 @@ sector_message
 	FCN "GetSector\r\n"
 done_message
 	FCN "Done\r\n"
-read_message
-	FCN " - read\r\n"
-write_message
-	FCN " - write\r\n"
-drive_message
-	FCN " - drive\r\n"
 boot_message
 	FCN "TRY FLEX\r\n"
 TCRLF

@@ -147,12 +147,21 @@ serial_getchar_echo
 ;
 FLEX_OUTCH		; OUTPUT CHARACTER
 serial_putchar
-	PSHS A								; wait for clear to write
+	PSHS A
+	PSHS A
+
 serial_putchar_wait
-	LDA serial_status
+	LDA serial_status					; wait until clear to write this time around
 	BITA #serial_status_tdre
 	BEQ serial_putchar_wait
 	PULS A
 
 	STA serial_data					; write
+
+serial_putchar_wait_2
+	LDA serial_status					; wait until clear to write next time around
+	BITA #serial_status_tdre
+	BEQ serial_putchar_wait_2
+	PULS A
+
 	RTS

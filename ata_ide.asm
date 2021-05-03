@@ -37,7 +37,7 @@ ata_ide_status_drq				EQU $08
 ata_ide_status_err				EQU $01
 
 ;
-;	FLEX_disk_driver_routine_jump_table
+;	FLEX_DISK_DRIVER_ROUTINE_JUMP_TABLE
 ;	-----------------------------------
 ;	This table is copied to $DE00 on startup and becomes the FLEX disk driver jump table
 ;
@@ -75,12 +75,12 @@ ata_ide_wait_for_not_busy_loop
 ;	Spinlock until the DRDY flag is set
 ;
 ata_ide_wait_for_drdy
-	PSHS	A
-ata_ide_wait_for_drdy_loop
-	LDA	ata_ide_status
-	BITA	#ata_ide_status_drdy
-	BEQ	ata_ide_wait_for_drdy_loop
-	PULS	A
+;	PSHS	A
+;ata_ide_wait_for_drdy_loop
+;	LDA	ata_ide_status
+;	BITA	#ata_ide_status_drdy
+;	BEQ	ata_ide_wait_for_drdy_loop
+;	PULS	A
 	RTS
 
 ;
@@ -116,8 +116,6 @@ ata_ide_identify
 ;		(B) = Sector Number
 ;	On Exit:
 ;		LBA registers loaded
-;		(C) = 0 even numbered sector (use first 256 bytes of IDE sector)
-;		    = 1 odd numbered sector (use second 256 bytes of sector)
 ;
 FLEX_SECTOR_TO_LBA
 	DECB				; because FLEX sectors count from 1, but ata/ide counts from 0
@@ -155,20 +153,6 @@ FLEX_READ_256_MORE
 	RTS
 
 ;
-;	FLEX_WRITE_256
-;	--------------
-;	Write 256 bytes to the ATA/IDE controller from the memory pointed to by X
-;
-FLEX_WRITE_256
-	CLRB
-FLEX_WRITE_256_MORE
-	LDA	,X+
-	STA	ata_ide_data
-	DECB
-	BNE	FLEX_WRITE_256_MORE
-	RTS
-
-;
 ;	FLEX_READ
 ;	---------
 ;	Read a single sector
@@ -187,6 +171,13 @@ FLEX_WRITE_256_MORE
 ;	FLEX sector numbers count from 01-FF.
 ;
 FLEX_READ
+;
+	PSHS	X
+	LEAX	m_read,pcr
+	LBSR	io_puts
+	PULS	X
+;
+
 	LBSR	ata_ide_wait_for_not_busy		; wait until not busy
 	LBSR	ata_ide_wait_for_drdy			; wait until drive ready
 	LBSR	FLEX_SECTOR_TO_LBA				; write the track and sector numbers to the LBA regisgers
@@ -206,13 +197,13 @@ FLEX_READ
 ;	--------------
 ;	Write 256 bytes to the ATA/IDE controller from the memory pointed to by X
 ;
-FLEX_WRITE_256_B
+FLEX_WRITE_256
 	CLRB
-FLEX_WRITE_256_B_MORE
+FLEX_WRITE_256_MORE
 	LDA	,X+
 	STA	ata_ide_data
 	DECB
-	BNE	FLEX_WRITE_256_B_MORE
+	BNE	FLEX_WRITE_256_MORE
 	RTS
 
 ;
@@ -231,6 +222,13 @@ FLEX_WRITE_256_B_MORE
 ;		    = 0 if an error
 ;
 FLEX_WRITE
+;
+	PSHS	X
+	LEAX	m_write,pcr
+	LBSR	io_puts
+	PULS	X
+;
+
 	LBSR	ata_ide_wait_for_not_busy		; wait until not busy
 	LBSR	ata_ide_wait_for_drdy			; wait until drive ready
 	LBSR	FLEX_SECTOR_TO_LBA				; write the track and sector numbers to the LBA regisgers
@@ -241,9 +239,9 @@ FLEX_WRITE
 	LBSR	ata_ide_wait_for_not_busy		; wait until not busy
 
 	PSHS	X
-	LBSR	FLEX_WRITE_256_B					; read the first 256 bytes
+	LBSR	FLEX_WRITE_256					; read the first 256 bytes
 	PULS	X
-	LBSR	FLEX_WRITE_256_B					; read the second 256 bytes
+	LBSR	FLEX_WRITE_256					; read the second 256 bytes
 	CLRB											; set the FLEX success condition state
 	RTS
 
@@ -260,10 +258,24 @@ FLEX_WRITE
 ;		    = 1 if an error
 ;
 FLEX_DRIVE
+;
+	PSHS	X
+	LEAX	m_drive,pcr
+	LBSR	io_puts
+	PULS	X
+;
 	LDA	$03,X						; load the drive number from the FCB
 	BEQ	FLEX_DRIVE_ZERO
 	CMPA	#$01
 	BEQ	FLEX_DRIVE_ONE
+
+;
+	PSHS	X
+	LEAX	m_fail,pcr
+	LBSR	io_puts
+	PULS	X
+;
+
 	LDB	#$1F						; load with fail state before we set the flags (next line)
 	ASRB								; set B=$0F, Z=0, and C=1
 	RTS
@@ -284,6 +296,12 @@ FLEX_DRIVE_ONE
 ;	Driver initialize (cold start)
 ;
 FLEX_INIT
+;
+	PSHS	X
+	LEAX	m_init,pcr
+	LBSR	io_puts
+	PULS	X
+;
 	;
 	;	Copy the FLEX disk driver jump table into RAM
 	;
@@ -321,7 +339,14 @@ FLEX_INIT_COPY
 ;	Driver initialize (warm start)
 ;
 FLEX_WARM
-	;	Fall through
+;
+	PSHS	X
+	LEAX	m_warm,pcr
+	LBSR	io_puts
+	PULS	X
+;
+	CLRB
+	RTS
 
 ;
 ;	FLEX_VERIFY
@@ -333,7 +358,14 @@ FLEX_WARM
 ;		    = 0 if an error
 ;
 FLEX_VERIFY
-	;	Fall through
+;
+	PSHS	X
+	LEAX	m_verify,pcr
+	LBSR	io_puts
+	PULS	X
+;
+	CLRB
+	RTS
 
 ;
 ;	FLEX_RESTORE
@@ -345,7 +377,14 @@ FLEX_VERIFY
 ;		    = 0 if an error
 ;
 FLEX_RESTORE
-	;	Fall through
+;
+	PSHS	X
+	LEAX	m_restore,pcr
+	LBSR	io_puts
+	PULS	X
+;
+	CLRB
+	RTS
 
 ;
 ;	FLEX_SEEK
@@ -357,6 +396,12 @@ FLEX_RESTORE
 ;		    = 0 if an error
 ;
 FLEX_SEEK
+;
+	PSHS	X
+	LEAX	m_seek,pcr
+	LBSR	io_puts
+	PULS	X
+;
 	CLRB
 	RTS
 
@@ -372,7 +417,22 @@ FLEX_SEEK
 ;		    = 1 if not ready
 ;
 FLEX_QUICK
-	;	Fall through
+;
+	PSHS	X
+	LEAX	m_quick,pcr
+	LBSR	io_puts
+	PULS	X
+;
+	LDA	ata_ide_disk_head
+	ANDA	#$E0
+	CMPA	#$E0
+	BEQ	FLEX_QUICK_READY
+	LDA	#%00000001			; EFHINZVC
+	TFR	A,CC
+	RTS
+FLEX_QUICK_READY
+	CLRB
+	RTS
 
 ;
 ;	FLEX_CHKRDY
@@ -389,6 +449,12 @@ FLEX_QUICK
 ;	if they are then the device must be connected - and is therefore ready.
 ;
 FLEX_CHKRDY
+;
+	PSHS	X
+	LEAX	m_chkrdy,pcr
+	LBSR	io_puts
+	PULS	X
+;
 	LDA	ata_ide_disk_head
 	ANDA	#$E0
 	CMPA	#$E0
@@ -399,4 +465,29 @@ FLEX_CHKRDY
 FLEX_CHKRDY_READY
 	CLRB
 	RTS
-	
+
+
+
+	PRAGMA cescapes
+m_read
+	FCN "[read]\r\n"
+m_write
+	FCN "[write]\r\n"
+m_verify
+	FCN "[verify]\r\n"
+m_restore
+	FCN "[restore]\r\n"
+m_drive
+	FCN "[drive]\r\n"
+m_chkrdy
+	FCN "[chkrdy]\r\n"
+m_quick
+	FCN "[quick]\r\n"
+m_init
+	FCN "[init]\r\n"
+m_warm
+	FCN "[warm]\r\n"
+m_seek
+	FCN "[seek]\r\n"
+m_fail
+	FCN "[FAIL]\r\n"
