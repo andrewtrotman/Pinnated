@@ -73,6 +73,19 @@ io_put_byte
 	RTS
 
 ;
+;	IO_PUT_D
+;	--------
+;	Print the value of accumultor D as a four nybble number
+;
+io_put_d
+	PSHS 	D
+	BSR 	io_put_byte
+	TFR 	B,A
+	BSR 	io_put_byte
+	PULS 	D
+	RTS
+
+;
 ;	IO_PUT_WORD
 ;	-----------
 ;	Print the value of register X as a four nybble number

@@ -36,6 +36,36 @@ ata_ide_status_drdy				EQU $40
 ata_ide_status_drq				EQU $08
 ata_ide_status_err				EQU $01
 
+
+
+
+	PRAGMA cescapes
+m_read
+	FCN "[read:"
+m_write
+	FCN "[write:"
+m_verify
+	FCN "[verify]\r\n"
+m_restore
+	FCN "[restore]\r\n"
+m_drive
+	FCN "[drive:"
+m_end_message
+	FCN "]\r\n"
+m_chkrdy
+	FCN "[chkrdy]\r\n"
+m_quick
+	FCN "[quick]\r\n"
+m_init
+	FCN "[init]\r\n"
+m_warm
+	FCN "[warm]\r\n"
+m_seek
+	FCN "[seek]\r\n"
+m_fail
+	FCN "[FAIL]\r\n"
+
+
 ;
 ;	FLEX_DISK_DRIVER_ROUTINE_JUMP_TABLE
 ;	-----------------------------------
@@ -94,7 +124,7 @@ ata_ide_identify
 	BSR	ata_ide_wait_for_drdy
 	LDA	#ata_ide_command_identfy
 	STA	ata_ide_command
-	BSR	ata_ide_wait_for_not_busy
+;	BSR	ata_ide_wait_for_not_busy
 	LBSR	FLEX_READ_256
 	LBSR	FLEX_READ_256
 	PULS	A
@@ -175,6 +205,11 @@ FLEX_READ
 	PSHS	X
 	LEAX	m_read,pcr
 	LBSR	io_puts
+
+	LBSR	io_put_d
+
+	LEAX	m_end_message,pcr
+	LBSR	io_puts
 	PULS	X
 ;
 
@@ -226,6 +261,11 @@ FLEX_WRITE
 	PSHS	X
 	LEAX	m_write,pcr
 	LBSR	io_puts
+
+	LBSR	io_put_d
+
+	LEAX	m_end_message,pcr
+	LBSR	io_puts
 	PULS	X
 ;
 
@@ -260,7 +300,13 @@ FLEX_WRITE
 FLEX_DRIVE
 ;
 	PSHS	X
+	LDA	$03,X						; load the drive number from the FCB
 	LEAX	m_drive,pcr
+	LBSR	io_puts
+
+	LBSR	io_put_byte
+
+	LEAX	m_end_message,pcr
 	LBSR	io_puts
 	PULS	X
 ;
@@ -465,29 +511,4 @@ FLEX_CHKRDY
 FLEX_CHKRDY_READY
 	CLRB
 	RTS
-
-
-
-	PRAGMA cescapes
-m_read
-	FCN "[read]\r\n"
-m_write
-	FCN "[write]\r\n"
-m_verify
-	FCN "[verify]\r\n"
-m_restore
-	FCN "[restore]\r\n"
-m_drive
-	FCN "[drive]\r\n"
-m_chkrdy
-	FCN "[chkrdy]\r\n"
-m_quick
-	FCN "[quick]\r\n"
-m_init
-	FCN "[init]\r\n"
-m_warm
-	FCN "[warm]\r\n"
-m_seek
-	FCN "[seek]\r\n"
-m_fail
-	FCN "[FAIL]\r\n"
+	
