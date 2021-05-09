@@ -36,6 +36,16 @@ ata_ide_status_drdy				EQU $40
 ata_ide_status_drq				EQU $08
 ata_ide_status_err				EQU $01
 
+ata_ide_err_amnf					EQU $01
+ata_ide_err_tk0nf					EQU $02
+ata_ide_err_abrt					EQU $04
+ata_ide_err_mcr					EQU $08
+ata_ide_err_idnf					EQU $10
+ata_ide_err_mc						EQU $20
+ata_ide_err_unc					EQU $40
+ata_ide_err_r						EQU $80
+
+ata_ide_err_not_found			EQU $13
 
 
 
@@ -64,6 +74,8 @@ m_seek
 	FCN "[seek]\r\n"
 m_fail
 	FCN "[FAIL]\r\n"
+m_ok
+	FCN "[OK]\r\n"
 
 
 ;
@@ -127,6 +139,71 @@ ata_ide_identify
 ;	BSR	ata_ide_wait_for_not_busy
 	LBSR	FLEX_READ_256
 	LBSR	FLEX_READ_256
+	PULS	A
+	RTS
+
+;
+;	ATA_IDE_ERR_TO_FLEX
+;	-------------------
+;
+ata_ide_err_to_flex
+	PSHS	A
+	LDA	ata_ide_status
+;
+	LBSR	io_put_byte
+;
+;	BITA	#ata_ide_status_err
+;	BEQ	ata_ide_err_to_flex_no_error
+	EORA	#$50
+	BEQ	ata_ide_err_to_flex_no_error
+
+	LDA	ata_ide_error
+;
+	LBSR	io_put_byte
+;
+	BITA	#ata_ide_err_not_found
+	BNE	ata_ide_err_to_flex_not_found
+
+	BITA	#ata_ide_err_unc
+	BNE	ata_ide_err_to_flex_unc
+
+	BITA	#ata_ide_err_abrt
+	BNE	ata_ide_err_to_flex_abrt
+
+ata_ide_err_to_flex_unknown
+	LDB	#$80
+	BRA	ata_ide_err_to_flex_done
+
+ata_ide_err_to_flex_abrt
+	LDB	#$04
+	BRA	ata_ide_err_to_flex_done
+
+ata_ide_err_to_flex_unc
+	LDB	#$08
+	BRA	ata_ide_err_to_flex_done
+
+ata_ide_err_to_flex_not_found
+	LDB	#$10
+	BRA	ata_ide_err_to_flex_done
+
+ata_ide_err_to_flex_no_error
+;
+	PSHS	X
+	LEAX	m_ok,pcr
+	LBSR	io_puts
+	PULS	X
+;
+	CLRB
+	PULS	A
+	RTS
+
+ata_ide_err_to_flex_done
+;
+	PSHS	X
+	LEAX	m_fail,pcr
+	LBSR	io_puts
+	PULS	X
+;
 	PULS	A
 	RTS
 
@@ -224,7 +301,9 @@ FLEX_READ
 	LBSR	FLEX_READ_256						; read the first 256 bytes
 	LDX	#$F000								; discard second half of IDE sector by writing it to ROM
 	LBSR	FLEX_READ_256						; read the second 256 bytes
-	CLRB											; set the FLEX success condition state
+
+;	CLRB											; set the FLEX success condition state
+	LBSR	ata_ide_err_to_flex
 	RTS
 
 ;
@@ -282,7 +361,9 @@ FLEX_WRITE
 	LBSR	FLEX_WRITE_256					; read the first 256 bytes
 	PULS	X
 	LBSR	FLEX_WRITE_256					; read the second 256 bytes
-	CLRB											; set the FLEX success condition state
+
+;	CLRB										; set the FLEX success condition state
+	LBSR	ata_ide_err_to_flex
 	RTS
 
 ;
