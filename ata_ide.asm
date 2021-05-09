@@ -274,18 +274,6 @@ FLEX_READ_256_MORE
 ;	FLEX sector numbers count from 01-FF.
 ;
 FLEX_READ
-;
-;	PSHS	X
-;	LEAX	m_read,pcr
-;	LBSR	io_puts
-;
-;	LBSR	io_put_d
-;
-;	LEAX	m_end_message,pcr
-;	LBSR	io_puts
-;	PULS	X
-;
-
 	LBSR	ata_ide_wait_for_not_busy		; wait until not busy
 	LBSR	ata_ide_wait_for_drdy
 
@@ -345,6 +333,8 @@ FLEX_WRITE
 ;
 
 	LBSR	ata_ide_wait_for_not_busy		; wait until not busy
+;	LBSR	ata_ide_wait_for_drdy
+
 	LBSR	FLEX_SECTOR_TO_LBA				; write the track and sector numbers to the LBA regisgers
 
 	LDA	#ata_ide_command_write_sector	; issue the command
