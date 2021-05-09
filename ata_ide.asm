@@ -393,27 +393,23 @@ FLEX_DRIVE
 	LDA	$03,X						; load the drive number from the FCB
 	BEQ	FLEX_DRIVE_ZERO
 	CMPA	#$01
-	BEQ	FLEX_DRIVE_ONE
-
-;
-	PSHS	X
-	LEAX	m_fail,pcr
-	LBSR	io_puts
-	PULS	X
-;
-
-	LDB	#$1F						; load with fail state before we set the flags (next line)
-	ASRB								; set B=$0F, Z=0, and C=1
-	RTS
+	BNE	FLEX_DRIVE_ERROR
+	LDA	#$F0						; LBA mode, drive 1
+	BRA	FLEX_DRIVE_CHECK
 FLEX_DRIVE_ZERO
 	LDA	#$E0						; LBA mode, drive 0
+FLEX_DRIVE_CHECK
 	STA	ata_ide_disk_head
+	LBSR	ata_ide_wait_for_not_busy		; wait until not busy
+
+	LDA	ata_ide_status
+	EORA	#$50
+	BNE	FLEX_DRIVE_ERROR
 	CLRB								; set B=$00, Z=1, and C=0
 	RTS
-FLEX_DRIVE_ONE
-	LDA	#$F0						; LBA mode, drive 1
-	STA	ata_ide_disk_head
-	CLRB								; set B=$00, Z=1, and C=0
+FLEX_DRIVE_ERROR
+	LDB	#$1F						; load with fail state before we set the flags (next line)
+	ASRB								; set B=$0F, Z=0, and C=1
 	RTS
 
 ;
@@ -453,6 +449,7 @@ FLEX_INIT_COPY
 
 	LDA	#ata_ide_feature_8_bit			; 8-bit I/O
 	STA	ata_ide_feature
+
 	LDA	#ata_ide_command_set_feature
 	STA	ata_ide_command
 	LBSR	ata_ide_wait_for_not_busy
