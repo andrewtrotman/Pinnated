@@ -112,6 +112,20 @@ ata_ide_wait_for_not_busy_loop
 	RTS
 
 ;
+;	ATA_IDE_WAIT_FOR_DRDY
+;	---------------------
+;	Spinlock until the DRDY flag is set
+;
+ata_ide_wait_for_drdy
+	PSHS	A
+ata_ide_wait_for_drdy_loop
+	LDA	ata_ide_status
+	BITA	#ata_ide_status_drdy
+	BEQ	ata_ide_wait_for_drdy_loop
+	PULS	A
+	RTS
+
+;
 ;	ATA_IDE_IDENTIFY
 ;	----------------
 ;	Load the device identify information into a 512-byte block pointed to by X
@@ -137,16 +151,16 @@ ata_ide_identify
 ata_ide_err_to_flex
 	LDA	ata_ide_status
 ;
-	LBSR	io_put_byte
+;	LBSR	io_put_byte
 ;
 	EORA	#$50
 	BNE	ata_ide_err_to_flex_error
 
 ;
-	PSHS	X
-	LEAX	m_ok,pcr
-	LBSR	io_puts
-	PULS	X
+;	PSHS	X
+;	LEAX	m_ok,pcr
+;	LBSR	io_puts
+;	PULS	X
 ;
 	CLRB
 	RTS
@@ -154,7 +168,7 @@ ata_ide_err_to_flex
 ata_ide_err_to_flex_error
 	LDA	ata_ide_error
 ;
-	LBSR	io_put_byte
+;	LBSR	io_put_byte
 ;
 	BITA	#ata_ide_err_not_found
 	BNE	ata_ide_err_to_flex_not_found
@@ -181,10 +195,10 @@ ata_ide_err_to_flex_not_found
 	LDB	#$10
 ata_ide_err_to_flex_done
 ;
-	PSHS	X
-	LEAX	m_fail,pcr
-	LBSR	io_puts
-	PULS	X
+;	PSHS	X
+;	LEAX	m_fail,pcr
+;	LBSR	io_puts
+;	PULS	X
 ;
 	RTS
 
@@ -261,18 +275,20 @@ FLEX_READ_256_MORE
 ;
 FLEX_READ
 ;
-	PSHS	X
-	LEAX	m_read,pcr
-	LBSR	io_puts
-
-	LBSR	io_put_d
-
-	LEAX	m_end_message,pcr
-	LBSR	io_puts
-	PULS	X
+;	PSHS	X
+;	LEAX	m_read,pcr
+;	LBSR	io_puts
+;
+;	LBSR	io_put_d
+;
+;	LEAX	m_end_message,pcr
+;	LBSR	io_puts
+;	PULS	X
 ;
 
 	LBSR	ata_ide_wait_for_not_busy		; wait until not busy
+	LBSR	ata_ide_wait_for_drdy
+
 	LBSR	FLEX_SECTOR_TO_LBA				; write the track and sector numbers to the LBA regisgers
 
 	LDA	#ata_ide_command_read_sector	; issue the command
@@ -358,16 +374,16 @@ FLEX_WRITE
 ;
 FLEX_DRIVE
 ;
-	PSHS	X
-	LDA	$03,X						; load the drive number from the FCB
-	LEAX	m_drive,pcr
-	LBSR	io_puts
-
-	LBSR	io_put_byte
-
-	LEAX	m_end_message,pcr
-	LBSR	io_puts
-	PULS	X
+;	PSHS	X
+;	LDA	$03,X						; load the drive number from the FCB
+;	LEAX	m_drive,pcr
+;	LBSR	io_puts
+;
+;	LBSR	io_put_byte
+;
+;	LEAX	m_end_message,pcr
+;	LBSR	io_puts
+;	PULS	X
 ;
 	LDA	$03,X						; load the drive number from the FCB
 	BEQ	FLEX_DRIVE_ZERO
