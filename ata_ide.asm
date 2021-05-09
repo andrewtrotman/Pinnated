@@ -112,51 +112,46 @@ ata_ide_wait_for_not_busy_loop
 	RTS
 
 ;
-;	ATA_IDE_WAIT_FOR_DRDY
-;	---------------------
-;	Spinlock until the DRDY flag is set
-;
-ata_ide_wait_for_drdy
-;	PSHS	A
-;ata_ide_wait_for_drdy_loop
-;	LDA	ata_ide_status
-;	BITA	#ata_ide_status_drdy
-;	BEQ	ata_ide_wait_for_drdy_loop
-;	PULS	A
-	RTS
-
-;
 ;	ATA_IDE_IDENTIFY
 ;	----------------
 ;	Load the device identify information into a 512-byte block pointed to by X
 ;
 ata_ide_identify
-	PSHS	A
+	PSHS	A,X
 	BSR	ata_ide_wait_for_not_busy
-	BSR	ata_ide_wait_for_drdy
+
 	LDA	#ata_ide_command_identfy
 	STA	ata_ide_command
 	BSR	ata_ide_wait_for_not_busy
+
 	LBSR	FLEX_READ_256
 	LBSR	FLEX_READ_256
-	PULS	A
+	PULS	X,A
 	RTS
 
 ;
 ;	ATA_IDE_ERR_TO_FLEX
 ;	-------------------
+;	Destroys (A)
 ;
 ata_ide_err_to_flex
-	PSHS	A
 	LDA	ata_ide_status
 ;
 	LBSR	io_put_byte
 ;
-;	BITA	#ata_ide_status_err
-;	BEQ	ata_ide_err_to_flex_no_error
 	EORA	#$50
-	BEQ	ata_ide_err_to_flex_no_error
+	BNE	ata_ide_err_to_flex_error
 
+;
+	PSHS	X
+	LEAX	m_ok,pcr
+	LBSR	io_puts
+	PULS	X
+;
+	CLRB
+	RTS
+
+ata_ide_err_to_flex_error
 	LDA	ata_ide_error
 ;
 	LBSR	io_put_byte
@@ -184,19 +179,6 @@ ata_ide_err_to_flex_unc
 
 ata_ide_err_to_flex_not_found
 	LDB	#$10
-	BRA	ata_ide_err_to_flex_done
-
-ata_ide_err_to_flex_no_error
-;
-	PSHS	X
-	LEAX	m_ok,pcr
-	LBSR	io_puts
-	PULS	X
-;
-	CLRB
-	PULS	A
-	RTS
-
 ata_ide_err_to_flex_done
 ;
 	PSHS	X
@@ -204,7 +186,6 @@ ata_ide_err_to_flex_done
 	LBSR	io_puts
 	PULS	X
 ;
-	PULS	A
 	RTS
 
 ;
@@ -223,6 +204,7 @@ ata_ide_err_to_flex_done
 ;		(B) = Sector Number
 ;	On Exit:
 ;		LBA registers loaded
+;		(A) and (B) destroyed
 ;
 FLEX_SECTOR_TO_LBA
 	DECB				; because FLEX sectors count from 1, but ata/ide counts from 0
@@ -295,13 +277,12 @@ FLEX_READ
 
 	LDA	#ata_ide_command_read_sector	; issue the command
 	STA	ata_ide_command
-
 	LBSR	ata_ide_wait_for_not_busy		; wait until not busy
+
 	LBSR	FLEX_READ_256						; read the first 256 bytes
 	LDX	#$F000								; discard second half of IDE sector by writing it to ROM
 	LBSR	FLEX_READ_256						; read the second 256 bytes
 
-;	CLRB											; set the FLEX success condition state
 	LBSR	ata_ide_err_to_flex
 	RTS
 
@@ -352,7 +333,6 @@ FLEX_WRITE
 
 	LDA	#ata_ide_command_write_sector	; issue the command
 	STA	ata_ide_command
-
 	LBSR	ata_ide_wait_for_not_busy		; wait until not busy
 
 	PSHS	X
@@ -360,7 +340,6 @@ FLEX_WRITE
 	PULS	X
 	LBSR	FLEX_WRITE_256						; read the second 256 bytes
 
-;	CLRB											; set the FLEX success condition state
 	LBSR	ata_ide_wait_for_not_busy		; wait until not busy
 	LBSR	ata_ide_err_to_flex
 	RTS
@@ -400,10 +379,13 @@ FLEX_DRIVE_ZERO
 	LDA	#$E0						; LBA mode, drive 0
 FLEX_DRIVE_CHECK
 	STA	ata_ide_disk_head
-	LBSR	ata_ide_wait_for_not_busy		; wait until not busy
 
+FLEX_DRIVE_BUSY					; wait until not busy
 	LDA	ata_ide_status
-	EORA	#$50
+	BITA	#ata_ide_status_busy
+	BNE	FLEX_DRIVE_BUSY
+
+	EORA	#$50						; check for failure (i.e. no disk in drive)
 	BNE	FLEX_DRIVE_ERROR
 	CLRB								; set B=$00, Z=1, and C=0
 	RTS
@@ -411,6 +393,7 @@ FLEX_DRIVE_ERROR
 	LDB	#$1F						; load with fail state before we set the flags (next line)
 	ASRB								; set B=$0F, Z=0, and C=1
 	RTS
+
 
 ;
 ;	FLEX_INIT
@@ -442,7 +425,6 @@ FLEX_INIT_COPY
 	STA	ata_ide_disk_head
 
 	LBSR	ata_ide_wait_for_not_busy		; wait until not busy
-	LBSR	ata_ide_wait_for_drdy			; wait until drive ready
 
 	LDA	#$E0		; LBA3=0, MASTER, MODE=LBA
 	STA	ata_ide_disk_head
