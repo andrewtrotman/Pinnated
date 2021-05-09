@@ -119,26 +119,13 @@ ata_ide_identify
 ;
 ata_ide_err_to_flex
 	LDA	ata_ide_status
-;
-;	LBSR	io_put_byte
-;
 	EORA	#$50
 	BNE	ata_ide_err_to_flex_error
-
-;
-;	PSHS	X
-;	LEAX	m_ok,pcr
-;	LBSR	io_puts
-;	PULS	X
-;
 	CLRB
 	RTS
 
 ata_ide_err_to_flex_error
 	LDA	ata_ide_error
-;
-;	LBSR	io_put_byte
-;
 	BITA	#ata_ide_err_not_found
 	BNE	ata_ide_err_to_flex_not_found
 
@@ -151,24 +138,15 @@ ata_ide_err_to_flex_error
 ata_ide_err_to_flex_unknown
 	LDB	#$80
 	BRA	ata_ide_err_to_flex_done
-
 ata_ide_err_to_flex_abrt
 	LDB	#$04
 	BRA	ata_ide_err_to_flex_done
-
 ata_ide_err_to_flex_unc
 	LDB	#$08
 	BRA	ata_ide_err_to_flex_done
-
 ata_ide_err_to_flex_not_found
 	LDB	#$10
 ata_ide_err_to_flex_done
-;
-;	PSHS	X
-;	LEAX	m_fail,pcr
-;	LBSR	io_puts
-;	PULS	X
-;
 	RTS
 
 ;
@@ -288,18 +266,6 @@ FLEX_WRITE_256_MORE
 ;		(Z) = 1 if no error
 ;		    = 0 if an error
 ;
-FLEX_WRITE_X
-;
-	PSHS	X
-	LEAX	bios_startup_message,pcr
-	LBSR	io_puts
-
-	LBSR	io_put_d
-
-	LEAX	bios_startup_message,pcr
-	LBSR	io_puts
-	PULS	X
-;
 FLEX_WRITE
 	LBSR	ata_ide_wait_for_not_busy		; wait until not busy
 	LBSR	ata_ide_wait_for_drdy
@@ -351,7 +317,7 @@ FLEX_DRIVE_BUSY					; wait until not busy
 	EORA	#$50						; check for failure (i.e. no disk in drive)
 	BNE	FLEX_DRIVE_ERROR
 
-	LBSR	ata_ide_wait_for_drdy
+;	LBSR	ata_ide_wait_for_drdy
 
 	CLRB								; set B=$00, Z=1, and C=0
 	RTS
