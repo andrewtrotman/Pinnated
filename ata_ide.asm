@@ -47,37 +47,6 @@ ata_ide_err_r						EQU $80
 
 ata_ide_err_not_found			EQU $13
 
-
-
-	PRAGMA cescapes
-m_read
-	FCN "[read:"
-m_write
-	FCN "[write:"
-m_verify
-	FCN "[verify]\r\n"
-m_restore
-	FCN "[restore]\r\n"
-m_drive
-	FCN "[drive:"
-m_end_message
-	FCN "]\r\n"
-m_chkrdy
-	FCN "[chkrdy]\r\n"
-m_quick
-	FCN "[quick]\r\n"
-m_init
-	FCN "[init]\r\n"
-m_warm
-	FCN "[warm]\r\n"
-m_seek
-	FCN "[seek]\r\n"
-m_fail
-	FCN "[FAIL]\r\n"
-m_ok
-	FCN "[OK]\r\n"
-
-
 ;
 ;	FLEX_DISK_DRIVER_ROUTINE_JUMP_TABLE
 ;	-----------------------------------
@@ -322,12 +291,12 @@ FLEX_WRITE_256_MORE
 FLEX_WRITE_X
 ;
 	PSHS	X
-	LEAX	m_write,pcr
+	LEAX	bios_startup_message,pcr
 	LBSR	io_puts
 
 	LBSR	io_put_d
 
-	LEAX	m_end_message,pcr
+	LEAX	bios_startup_message,pcr
 	LBSR	io_puts
 	PULS	X
 ;
