@@ -35,12 +35,6 @@ init_message
 	FCN "Initialise\r\n"
 info_message
 	FCN "Getinfo\r\n"
-sector_message
-	FCN "GetSector\r\n"
-done_message
-	FCN "Done\r\n"
-boot_message
-	FCN "TRY FLEX\r\n"
 TCRLF
 	FCN "\r\n"
 
@@ -151,74 +145,21 @@ finish
 	LDX #BUFFER
 	LBSR ata_ide_identify
 
-	LEAX done_message,pcr
-	LBSR io_puts
-
 	LBSR CFINFO
 
 	LEAX TCRLF,pcr
 	LBSR io_puts
 
 ;
-;	SIR
+;	Boot FLEX
 ;
-	LEAX sector_message,pcr
-	LBSR io_puts
-	LDX #BUFFER
-	LDA #$00
-	LDB #$03
-	LBSR FLEX_READ
-	LEAX TCRLF,pcr
-	LBSR io_puts
-	LDX	#BUFFER
-	LBSR	io_dump_memory
-	LEAX TCRLF,pcr
-	LBSR io_puts
-;
-;	DIRECTORY
-;
-	LEAX sector_message,pcr
-	LBSR io_puts
-	LDX #BUFFER
-	LDA #$00
-	LDB #$05
-	LBSR FLEX_READ
-	LEAX TCRLF,pcr
-	LBSR io_puts
-	LDX	#BUFFER
-	LBSR	io_dump_memory
-	LEAX TCRLF,pcr
-	LBSR io_puts
-	LEAX sector_message,pcr
-	LBSR io_puts
-	LDX #BUFFER
-	LDA #$00
-	LDB #$06
-	LBSR FLEX_READ
-	LEAX TCRLF,pcr
-	LBSR io_puts
-	LDX	#BUFFER
-	LBSR	io_dump_memory
-	LEAX TCRLF,pcr
-	LBSR io_puts
-
-;
-;	try booting
-;
-	LEAX boot_message,pcr
-	LBSR io_puts
 	LDX #BUFFER
 	LDA #$00
 	LDB #$01
 	LBSR FLEX_READ
 	JMP $C100
 
-
-spin_lock
-	LDA	ata_ide_data
-	LBRA	spin_lock
-
-;	LBRA finish
+	LBRA finish			; if we get here then start over (but it can't get here!)
 
 
 ;

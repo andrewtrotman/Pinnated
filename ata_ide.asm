@@ -136,7 +136,7 @@ ata_ide_identify
 	BSR	ata_ide_wait_for_drdy
 	LDA	#ata_ide_command_identfy
 	STA	ata_ide_command
-;	BSR	ata_ide_wait_for_not_busy
+	BSR	ata_ide_wait_for_not_busy
 	LBSR	FLEX_READ_256
 	LBSR	FLEX_READ_256
 	PULS	A
@@ -291,7 +291,6 @@ FLEX_READ
 ;
 
 	LBSR	ata_ide_wait_for_not_busy		; wait until not busy
-	LBSR	ata_ide_wait_for_drdy			; wait until drive ready
 	LBSR	FLEX_SECTOR_TO_LBA				; write the track and sector numbers to the LBA regisgers
 
 	LDA	#ata_ide_command_read_sector	; issue the command
@@ -349,7 +348,6 @@ FLEX_WRITE
 ;
 
 	LBSR	ata_ide_wait_for_not_busy		; wait until not busy
-	LBSR	ata_ide_wait_for_drdy			; wait until drive ready
 	LBSR	FLEX_SECTOR_TO_LBA				; write the track and sector numbers to the LBA regisgers
 
 	LDA	#ata_ide_command_write_sector	; issue the command
@@ -358,11 +356,12 @@ FLEX_WRITE
 	LBSR	ata_ide_wait_for_not_busy		; wait until not busy
 
 	PSHS	X
-	LBSR	FLEX_WRITE_256					; read the first 256 bytes
+	LBSR	FLEX_WRITE_256						; read the first 256 bytes
 	PULS	X
-	LBSR	FLEX_WRITE_256					; read the second 256 bytes
+	LBSR	FLEX_WRITE_256						; read the second 256 bytes
 
-;	CLRB										; set the FLEX success condition state
+;	CLRB											; set the FLEX success condition state
+	LBSR	ata_ide_wait_for_not_busy		; wait until not busy
 	LBSR	ata_ide_err_to_flex
 	RTS
 
@@ -550,14 +549,6 @@ FLEX_QUICK
 	LBSR	io_puts
 	PULS	X
 ;
-	LDA	ata_ide_disk_head
-	ANDA	#$E0
-	CMPA	#$E0
-	BEQ	FLEX_QUICK_READY
-	LDA	#%00000001			; EFHINZVC
-	TFR	A,CC
-	RTS
-FLEX_QUICK_READY
 	CLRB
 	RTS
 
@@ -582,14 +573,6 @@ FLEX_CHKRDY
 	LBSR	io_puts
 	PULS	X
 ;
-	LDA	ata_ide_disk_head
-	ANDA	#$E0
-	CMPA	#$E0
-	BEQ	FLEX_CHKRDY_READY
-	LDA	#%00000001			; EFHINZVC
-	TFR	A,CC
-	RTS
-FLEX_CHKRDY_READY
 	CLRB
 	RTS
 	
