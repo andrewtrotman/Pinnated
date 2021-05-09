@@ -401,12 +401,6 @@ FLEX_DRIVE_ERROR
 ;	Driver initialize (cold start)
 ;
 FLEX_INIT
-;
-	PSHS	X
-	LEAX	m_init,pcr
-	LBSR	io_puts
-	PULS	X
-;
 	;
 	;	Copy the FLEX disk driver jump table into RAM
 	;
@@ -444,12 +438,6 @@ FLEX_INIT_COPY
 ;	Driver initialize (warm start)
 ;
 FLEX_WARM
-;
-	PSHS	X
-	LEAX	m_warm,pcr
-	LBSR	io_puts
-	PULS	X
-;
 	CLRB
 	RTS
 
@@ -463,12 +451,6 @@ FLEX_WARM
 ;		    = 0 if an error
 ;
 FLEX_VERIFY
-;
-	PSHS	X
-	LEAX	m_verify,pcr
-	LBSR	io_puts
-	PULS	X
-;
 	CLRB
 	RTS
 
@@ -482,12 +464,6 @@ FLEX_VERIFY
 ;		    = 0 if an error
 ;
 FLEX_RESTORE
-;
-	PSHS	X
-	LEAX	m_restore,pcr
-	LBSR	io_puts
-	PULS	X
-;
 	CLRB
 	RTS
 
@@ -501,12 +477,6 @@ FLEX_RESTORE
 ;		    = 0 if an error
 ;
 FLEX_SEEK
-;
-	PSHS	X
-	LEAX	m_seek,pcr
-	LBSR	io_puts
-	PULS	X
-;
 	CLRB
 	RTS
 
@@ -522,12 +492,6 @@ FLEX_SEEK
 ;		    = 1 if not ready
 ;
 FLEX_QUICK
-;
-	PSHS	X
-	LEAX	m_quick,pcr
-	LBSR	io_puts
-	PULS	X
-;
 	CLRB
 	RTS
 
@@ -542,16 +506,7 @@ FLEX_QUICK
 ;		(C) = 0 if drive ready
 ;		    = 1 if not ready
 ;
-;	Read the disk head register and make sure the compulsory set bits are set
-;	if they are then the device must be connected - and is therefore ready.
-;
 FLEX_CHKRDY
-;
-	PSHS	X
-	LEAX	m_chkrdy,pcr
-	LBSR	io_puts
-	PULS	X
-;
 	CLRB
 	RTS
 	
