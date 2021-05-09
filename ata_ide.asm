@@ -319,7 +319,7 @@ FLEX_WRITE_256_MORE
 ;		(Z) = 1 if no error
 ;		    = 0 if an error
 ;
-FLEX_WRITE
+FLEX_WRITE_X
 ;
 	PSHS	X
 	LEAX	m_write,pcr
@@ -331,9 +331,9 @@ FLEX_WRITE
 	LBSR	io_puts
 	PULS	X
 ;
-
+FLEX_WRITE
 	LBSR	ata_ide_wait_for_not_busy		; wait until not busy
-;	LBSR	ata_ide_wait_for_drdy
+	LBSR	ata_ide_wait_for_drdy
 
 	LBSR	FLEX_SECTOR_TO_LBA				; write the track and sector numbers to the LBA regisgers
 
@@ -363,18 +363,6 @@ FLEX_WRITE
 ;		    = 1 if an error
 ;
 FLEX_DRIVE
-;
-;	PSHS	X
-;	LDA	$03,X						; load the drive number from the FCB
-;	LEAX	m_drive,pcr
-;	LBSR	io_puts
-;
-;	LBSR	io_put_byte
-;
-;	LEAX	m_end_message,pcr
-;	LBSR	io_puts
-;	PULS	X
-;
 	LDA	$03,X						; load the drive number from the FCB
 	BEQ	FLEX_DRIVE_ZERO
 	CMPA	#$01
@@ -393,13 +381,15 @@ FLEX_DRIVE_BUSY					; wait until not busy
 
 	EORA	#$50						; check for failure (i.e. no disk in drive)
 	BNE	FLEX_DRIVE_ERROR
+
+	LBSR	ata_ide_wait_for_drdy
+
 	CLRB								; set B=$00, Z=1, and C=0
 	RTS
 FLEX_DRIVE_ERROR
 	LDB	#$1F						; load with fail state before we set the flags (next line)
 	ASRB								; set B=$0F, Z=0, and C=1
 	RTS
-
 
 ;
 ;	FLEX_INIT
