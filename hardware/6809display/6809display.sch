@@ -41,7 +41,7 @@ U 1 1 60672FFF
 P 800 1550
 F 0 "R16" V 900 1550 50  0000 C CNN
 F 1 "2k2" V 700 1550 50  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0309_L9.0mm_D3.2mm_P12.70mm_Horizontal" H 800 1550 50  0001 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" H 800 1550 50  0001 C CNN
 F 3 "~" H 800 1550 50  0001 C CNN
 	1    800  1550
 	0    -1   -1   0   
@@ -52,10 +52,10 @@ U 1 1 60673C3A
 P 1800 1550
 F 0 "R17" V 1900 1550 50  0000 C CNN
 F 1 "2k2" V 1700 1550 50  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0309_L9.0mm_D3.2mm_P12.70mm_Horizontal" H 1800 1550 50  0001 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" H 1800 1550 50  0001 C CNN
 F 3 "~" H 1800 1550 50  0001 C CNN
 	1    1800 1550
-	0    -1   -1   0   
+	0    1    -1   0   
 $EndComp
 Wire Wire Line
 	900  1550 1300 1550
@@ -251,7 +251,7 @@ Text GLabel 3950 2500 0    50   Input ~ 0
 +5v
 Wire Wire Line
 	3950 2450 3950 2550
-Text GLabel 3750 2700 0    50   Input ~ 0
+Text GLabel 3950 2700 0    50   Input ~ 0
 GND
 Text GLabel 4600 3850 3    50   Input ~ 0
 GND
@@ -1803,17 +1803,6 @@ F 3 "http://www.ti.com/lit/gpn/sn74LS283" H 7000 5100 50  0001 C CNN
 $EndComp
 Text GLabel 3950 2800 0    50   Input ~ 0
 GND
-$Comp
-L Device:Net-Tie_2 NT1
-U 1 1 610191AE
-P 3850 2700
-F 0 "NT1" H 3850 2881 50  0001 C CNN
-F 1 "Net-Tie_2" H 3850 2790 50  0001 C CNN
-F 2 "NetTie:NetTie-2_SMD_Pad0.5mm" H 3850 2700 50  0001 C CNN
-F 3 "~" H 3850 2700 50  0001 C CNN
-	1    3850 2700
-	1    0    0    -1  
-$EndComp
 Connection ~ 3250 10550
 Connection ~ 3250 10850
 $Comp
