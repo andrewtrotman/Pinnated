@@ -211,24 +211,24 @@ Wire Wire Line
 	1950 950  5250 950 
 $Comp
 L 74xx:74HC04 U2
-U 5 1 606E72FD
+U 2 1 606E72FD
 P 4500 9750
 F 0 "U2" H 4450 9800 50  0000 C CNN
 F 1 "74HC04" H 4450 9700 50  0000 C CNN
 F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 4500 9750 50  0001 C CNN
 F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 4500 9750 50  0001 C CNN
-	5    4500 9750
+	2    4500 9750
 	1    0    0    -1  
 $EndComp
 $Comp
 L 74xx:74HC04 U2
-U 6 1 606E899D
+U 3 1 606E899D
 P 4500 10100
 F 0 "U2" H 4450 10150 50  0000 C CNN
 F 1 "74HC04" H 4450 10050 50  0000 C CNN
 F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 4500 10100 50  0001 C CNN
 F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 4500 10100 50  0001 C CNN
-	6    4500 10100
+	3    4500 10100
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -765,35 +765,35 @@ F 3 "~" H 6350 2400 50  0001 C CNN
 $EndComp
 $Comp
 L 74xx:74HC04 U2
-U 3 1 606E2126
+U 4 1 606E2126
 P 5850 3600
 F 0 "U2" H 5800 3650 50  0000 C CNN
 F 1 "74HC04" H 5800 3550 50  0000 C CNN
 F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 5850 3600 50  0001 C CNN
 F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 5850 3600 50  0001 C CNN
-	3    5850 3600
+	4    5850 3600
 	1    0    0    -1  
 $EndComp
 $Comp
 L 74xx:74HC04 U2
-U 2 1 606E11CF
+U 5 1 606E11CF
 P 5850 2850
 F 0 "U2" H 5800 2900 50  0000 C CNN
 F 1 "74HC04" H 5800 2800 50  0000 C CNN
 F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 5850 2850 50  0001 C CNN
 F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 5850 2850 50  0001 C CNN
-	2    5850 2850
+	5    5850 2850
 	1    0    0    -1  
 $EndComp
 $Comp
 L 74xx:74HC04 U2
-U 1 1 606DFD5F
+U 6 1 606DFD5F
 P 5850 2100
 F 0 "U2" H 5800 2150 50  0000 C CNN
 F 1 "74HC04" H 5800 2050 50  0000 C CNN
 F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 5850 2100 50  0001 C CNN
 F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 5850 2100 50  0001 C CNN
-	1    5850 2100
+	6    5850 2100
 	1    0    0    -1  
 $EndComp
 Text GLabel 15500 7150 2    50   Input ~ 0
@@ -1156,13 +1156,13 @@ Wire Wire Line
 NoConn ~ 4800 9400
 $Comp
 L 74xx:74HC04 U2
-U 4 1 606E55BE
+U 1 1 606E55BE
 P 4500 9400
 F 0 "U2" H 4450 9450 50  0000 C CNN
 F 1 "74HC04" H 4450 9350 50  0000 C CNN
 F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 4500 9400 50  0001 C CNN
 F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 4500 9400 50  0001 C CNN
-	4    4500 9400
+	1    4500 9400
 	1    0    0    -1  
 $EndComp
 $Comp
