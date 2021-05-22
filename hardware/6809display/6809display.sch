@@ -1867,4 +1867,15 @@ Wire Bus Line
 	13400 7650 13400 9550
 Wire Bus Line
 	15650 1150 15650 3150
+$Comp
+L aspt:Pinnated Logo1
+U 1 1 60AA09D0
+P 4950 10700
+F 0 "Logo1" H 4975 10746 50  0000 L CNN
+F 1 "Pinnated" H 4975 10655 50  0000 L CNN
+F 2 "Pinnated:Pinnule" H 4950 10700 50  0001 C CNN
+F 3 "" H 4950 10700 50  0001 C CNN
+	1    4950 10700
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
