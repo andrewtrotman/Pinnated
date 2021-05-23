@@ -19,7 +19,7 @@ U 1 1 60668EDA
 P 2750 1250
 F 0 "U4" H 2750 0   50  0000 C CNN
 F 1 "SAA5020" H 2750 -100 50  0000 C CNN
-F 2 "Package_DIP:DIP-24_W15.24mm_LongPads" H 2550 1200 50  0001 C CNN
+F 2 "Package_DIP:DIP-24_W15.24mm_Socket_LongPads" H 2550 1200 50  0001 C CNN
 F 3 "" H 2550 1200 50  0001 C CNN
 	1    2750 1250
 	1    0    0    -1  
@@ -104,7 +104,7 @@ U 1 1 60690DD6
 P 1000 1800
 F 0 "U1" H 950 1850 50  0000 C CNN
 F 1 "74HC04" H 950 1750 50  0000 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 1000 1800 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 1000 1800 50  0001 C CNN
 F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 1000 1800 50  0001 C CNN
 	1    1000 1800
 	1    0    0    -1  
@@ -115,7 +115,7 @@ U 2 1 6069324A
 P 1600 1800
 F 0 "U1" H 1550 1850 50  0000 C CNN
 F 1 "74HC04" H 1550 1750 50  0000 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 1600 1800 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 1600 1800 50  0001 C CNN
 F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 1600 1800 50  0001 C CNN
 	2    1600 1800
 	1    0    0    -1  
@@ -126,7 +126,7 @@ U 3 1 6069493B
 P 4050 4250
 F 0 "U1" H 4000 4300 50  0000 C CNN
 F 1 "74HC04" H 4000 4200 50  0000 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 4050 4250 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 4050 4250 50  0001 C CNN
 F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 4050 4250 50  0001 C CNN
 	3    4050 4250
 	1    0    0    -1  
@@ -137,7 +137,7 @@ U 4 1 60696030
 P 4050 4550
 F 0 "U1" H 4000 4600 50  0000 C CNN
 F 1 "74HC04" H 4000 4500 50  0000 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 4050 4550 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 4050 4550 50  0001 C CNN
 F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 4050 4550 50  0001 C CNN
 	4    4050 4550
 	1    0    0    -1  
@@ -149,7 +149,7 @@ U 1 1 606A0DD2
 P 4900 4350
 F 0 "U3" H 4850 4350 50  0000 C CNN
 F 1 "74HC393" H 4850 4250 50  0000 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 4900 4350 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 4900 4350 50  0001 C CNN
 F 3 "74xx\\74LS393.pdf" H 4900 4350 50  0001 C CNN
 	1    4900 4350
 	1    0    0    -1  
@@ -160,7 +160,7 @@ U 2 1 606A1892
 P 4900 4950
 F 0 "U3" H 4850 4950 50  0000 C CNN
 F 1 "74HC393" H 4850 4850 50  0000 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 4900 4950 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 4900 4950 50  0001 C CNN
 F 3 "74xx\\74LS393.pdf" H 4900 4950 50  0001 C CNN
 	2    4900 4950
 	1    0    0    -1  
@@ -188,7 +188,7 @@ U 1 1 606B35BA
 P 4600 1400
 F 0 "U5" H 4600 250 50  0000 C CNN
 F 1 "SAA5050" H 4600 150 50  0000 C CNN
-F 2 "Package_DIP:DIP-28_W15.24mm_LongPads" H 4250 1500 50  0001 C CNN
+F 2 "Package_DIP:DIP-28_W15.24mm_Socket_LongPads" H 4250 1500 50  0001 C CNN
 F 3 "" H 4250 1500 50  0001 C CNN
 	1    4600 1400
 	1    0    0    -1  
@@ -215,7 +215,7 @@ U 2 1 606E72FD
 P 4500 9750
 F 0 "U2" H 4450 9800 50  0000 C CNN
 F 1 "74HC04" H 4450 9700 50  0000 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 4500 9750 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 4500 9750 50  0001 C CNN
 F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 4500 9750 50  0001 C CNN
 	2    4500 9750
 	1    0    0    -1  
@@ -226,7 +226,7 @@ U 3 1 606E899D
 P 4500 10100
 F 0 "U2" H 4450 10150 50  0000 C CNN
 F 1 "74HC04" H 4450 10050 50  0000 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 4500 10100 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 4500 10100 50  0001 C CNN
 F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 4500 10100 50  0001 C CNN
 	3    4500 10100
 	1    0    0    -1  
@@ -536,7 +536,7 @@ U 1 1 60737FB6
 P 6550 3600
 F 0 "Q3" H 6741 3646 50  0000 L CNN
 F 1 "BC557" H 6741 3555 50  0000 L CNN
-F 2 "Package_TO_SOT_THT:TO-92_Inline" H 6750 3525 50  0001 L CIN
+F 2 "Package_TO_SOT_THT:TO-92_Inline_Wide" H 6750 3525 50  0001 L CIN
 F 3 "http://www.fairchildsemi.com/ds/BC/BC557.pdf" H 6550 3600 50  0001 L CNN
 	1    6550 3600
 	1    0    0    -1  
@@ -621,7 +621,7 @@ U 1 1 6072275F
 P 6550 2850
 F 0 "Q2" H 6741 2896 50  0000 L CNN
 F 1 "BC557" H 6741 2805 50  0000 L CNN
-F 2 "Package_TO_SOT_THT:TO-92_Inline" H 6750 2775 50  0001 L CIN
+F 2 "Package_TO_SOT_THT:TO-92_Inline_Wide" H 6750 2775 50  0001 L CIN
 F 3 "http://www.fairchildsemi.com/ds/BC/BC557.pdf" H 6550 2850 50  0001 L CNN
 	1    6550 2850
 	1    0    0    -1  
@@ -703,7 +703,7 @@ U 1 1 6070AD5E
 P 6550 2100
 F 0 "Q1" H 6741 2146 50  0000 L CNN
 F 1 "BC557" H 6741 2055 50  0000 L CNN
-F 2 "Package_TO_SOT_THT:TO-92_Inline" H 6750 2025 50  0001 L CIN
+F 2 "Package_TO_SOT_THT:TO-92_Inline_Wide" H 6750 2025 50  0001 L CIN
 F 3 "http://www.fairchildsemi.com/ds/BC/BC557.pdf" H 6550 2100 50  0001 L CNN
 	1    6550 2100
 	1    0    0    -1  
@@ -769,7 +769,7 @@ U 4 1 606E2126
 P 5850 3600
 F 0 "U2" H 5800 3650 50  0000 C CNN
 F 1 "74HC04" H 5800 3550 50  0000 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 5850 3600 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 5850 3600 50  0001 C CNN
 F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 5850 3600 50  0001 C CNN
 	4    5850 3600
 	1    0    0    -1  
@@ -780,7 +780,7 @@ U 5 1 606E11CF
 P 5850 2850
 F 0 "U2" H 5800 2900 50  0000 C CNN
 F 1 "74HC04" H 5800 2800 50  0000 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 5850 2850 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 5850 2850 50  0001 C CNN
 F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 5850 2850 50  0001 C CNN
 	5    5850 2850
 	1    0    0    -1  
@@ -791,7 +791,7 @@ U 6 1 606DFD5F
 P 5850 2100
 F 0 "U2" H 5800 2150 50  0000 C CNN
 F 1 "74HC04" H 5800 2050 50  0000 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 5850 2100 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 5850 2100 50  0001 C CNN
 F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 5850 2100 50  0001 C CNN
 	6    5850 2100
 	1    0    0    -1  
@@ -812,7 +812,7 @@ U 6 1 606F7EB3
 P 13300 7050
 F 0 "U1" H 13250 7100 50  0000 C CNN
 F 1 "74HC04" H 13250 7000 50  0000 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 13300 7050 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 13300 7050 50  0001 C CNN
 F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 13300 7050 50  0001 C CNN
 	6    13300 7050
 	1    0    0    -1  
@@ -823,7 +823,7 @@ U 5 1 606F65D4
 P 12100 6950
 F 0 "U1" H 12050 7000 50  0000 C CNN
 F 1 "74HC04" H 12050 6900 50  0000 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 12100 6950 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 12100 6950 50  0001 C CNN
 F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 12100 6950 50  0001 C CNN
 	5    12100 6950
 	1    0    0    -1  
@@ -1058,7 +1058,7 @@ U 1 1 6101C4B8
 P 12700 7050
 F 0 "U7" H 12700 7100 50  0000 C CNN
 F 1 "74HC08" H 12700 7000 50  0000 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 12700 7050 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 12700 7050 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 12700 7050 50  0001 C CNN
 	1    12700 7050
 	1    0    0    -1  
@@ -1069,7 +1069,7 @@ U 2 1 6101FDCD
 P 3600 9400
 F 0 "U7" H 3600 9450 50  0000 C CNN
 F 1 "74HC08" H 3600 9350 50  0000 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 3600 9400 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 3600 9400 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 3600 9400 50  0001 C CNN
 	2    3600 9400
 	1    0    0    -1  
@@ -1080,7 +1080,7 @@ U 3 1 610260D7
 P 3600 9750
 F 0 "U7" H 3600 9800 50  0000 C CNN
 F 1 "74HC08" H 3600 9700 50  0000 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 3600 9750 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 3600 9750 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 3600 9750 50  0001 C CNN
 	3    3600 9750
 	1    0    0    -1  
@@ -1091,7 +1091,7 @@ U 4 1 6102876D
 P 3600 10100
 F 0 "U7" H 3600 10150 50  0000 C CNN
 F 1 "74HC08" H 3600 10050 50  0000 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 3600 10100 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 3600 10100 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 3600 10100 50  0001 C CNN
 	4    3600 10100
 	1    0    0    -1  
@@ -1124,7 +1124,7 @@ U 5 1 6102ACF0
 P 2550 9800
 F 0 "U7" H 2450 9850 50  0000 L CNN
 F 1 "74HC08" H 2400 9750 50  0000 L CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 2550 9800 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 2550 9800 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS08" H 2550 9800 50  0001 C CNN
 	5    2550 9800
 	1    0    0    -1  
@@ -1160,7 +1160,7 @@ U 1 1 606E55BE
 P 4500 9400
 F 0 "U2" H 4450 9450 50  0000 C CNN
 F 1 "74HC04" H 4450 9350 50  0000 C CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 4500 9400 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 4500 9400 50  0001 C CNN
 F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 4500 9400 50  0001 C CNN
 	1    4500 9400
 	1    0    0    -1  
@@ -1171,7 +1171,7 @@ U 7 1 606E364F
 P 1650 9800
 F 0 "U2" H 1600 9850 50  0000 L CNN
 F 1 "74HC04" H 1500 9750 50  0000 L CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 1650 9800 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 1650 9800 50  0001 C CNN
 F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 1650 9800 50  0001 C CNN
 	7    1650 9800
 	1    0    0    -1  
@@ -1182,7 +1182,7 @@ U 3 1 606A2C7D
 P 2100 9800
 F 0 "U3" H 2050 9850 50  0000 L CNN
 F 1 "74HC393" H 1950 9750 50  0000 L CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 2100 9800 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 2100 9800 50  0001 C CNN
 F 3 "74xx\\74LS393.pdf" H 2100 9800 50  0001 C CNN
 	3    2100 9800
 	1    0    0    -1  
@@ -1193,7 +1193,7 @@ U 7 1 60697310
 P 1200 9800
 F 0 "U1" H 1150 9850 50  0000 L CNN
 F 1 "74HC04" H 1050 9750 50  0000 L CNN
-F 2 "Package_DIP:DIP-14_W7.62mm_LongPads" H 1200 9800 50  0001 C CNN
+F 2 "Package_DIP:DIP-14_W7.62mm_Socket_LongPads" H 1200 9800 50  0001 C CNN
 F 3 "https://assets.nexperia.com/documents/data-sheet/74HC_HCT04.pdf" H 1200 9800 50  0001 C CNN
 	7    1200 9800
 	1    0    0    -1  
@@ -1354,7 +1354,7 @@ U 1 1 60AD5BCA
 P 14650 2450
 F 0 "J2" H 14650 2500 45  0000 C CNN
 F 1 "To Computer" H 14650 2400 45  0000 C CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_2x25_P2.54mm_Vertical" H 14680 2600 20  0001 C CNN
+F 2 "Connector_IDC:IDC-Header_2x25_P2.54mm_Vertical" H 14680 2600 20  0001 C CNN
 F 3 "" H 14650 2450 50  0001 C CNN
 	1    14650 2450
 	1    0    0    -1  
@@ -1417,7 +1417,7 @@ U 1 1 60788CEC
 P 14600 8250
 F 0 "U6" H 14600 8300 50  0000 C CNN
 F 1 "IDT7132" H 14600 8200 50  0000 C CNN
-F 2 "Package_DIP:DIP-48_W15.24mm_LongPads" H 14600 8250 50  0001 C CNN
+F 2 "Package_DIP:DIP-48_W15.24mm_Socket_LongPads" H 14600 8250 50  0001 C CNN
 F 3 "" H 14600 8250 50  0001 C CNN
 	1    14600 8250
 	1    0    0    -1  
@@ -1534,7 +1534,7 @@ U 1 1 60A16699
 P 4900 6400
 F 0 "U8" H 4900 6450 50  0000 C CNN
 F 1 "74HC283" H 4900 6350 50  0000 C CNN
-F 2 "Package_DIP:DIP-16_W7.62mm_LongPads" H 4900 6400 50  0001 C CNN
+F 2 "Package_DIP:DIP-16_W7.62mm_Socket_LongPads" H 4900 6400 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS283" H 4900 6400 50  0001 C CNN
 	1    4900 6400
 	1    0    0    -1  
@@ -1545,7 +1545,7 @@ U 1 1 60A237F8
 P 6700 6850
 F 0 "U9" H 6700 6900 50  0000 C CNN
 F 1 "74HC283" H 6700 6800 50  0000 C CNN
-F 2 "Package_DIP:DIP-16_W7.62mm_LongPads" H 6700 6850 50  0001 C CNN
+F 2 "Package_DIP:DIP-16_W7.62mm_Socket_LongPads" H 6700 6850 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS283" H 6700 6850 50  0001 C CNN
 	1    6700 6850
 	1    0    0    -1  
@@ -1796,7 +1796,7 @@ U 1 1 6095EA85
 P 7000 5100
 F 0 "U10" H 7000 5150 50  0000 C CNN
 F 1 "74HC283" H 7000 5050 50  0000 C CNN
-F 2 "Package_DIP:DIP-16_W7.62mm_LongPads" H 7000 5100 50  0001 C CNN
+F 2 "Package_DIP:DIP-16_W7.62mm_Socket_LongPads" H 7000 5100 50  0001 C CNN
 F 3 "http://www.ti.com/lit/gpn/sn74LS283" H 7000 5100 50  0001 C CNN
 	1    7000 5100
 	1    0    0    -1  
@@ -1843,6 +1843,17 @@ F 3 "~" H 3600 10700 50  0001 C CNN
 	1    3600 10700
 	-1   0    0    1   
 $EndComp
+$Comp
+L aspt:Pinnated Logo1
+U 1 1 60AA09D0
+P 4950 10700
+F 0 "Logo1" H 4975 10746 50  0000 L CNN
+F 1 "Pinnated" H 4975 10655 50  0000 L CNN
+F 2 "Pinnated:Pinnule" H 4950 10700 50  0001 C CNN
+F 3 "" H 4950 10700 50  0001 C CNN
+	1    4950 10700
+	1    0    0    -1  
+$EndComp
 Wire Bus Line
 	8000 4800 8000 5000
 Wire Bus Line
@@ -1867,15 +1878,4 @@ Wire Bus Line
 	13400 7650 13400 9550
 Wire Bus Line
 	15650 1150 15650 3150
-$Comp
-L aspt:Pinnated Logo1
-U 1 1 60AA09D0
-P 4950 10700
-F 0 "Logo1" H 4975 10746 50  0000 L CNN
-F 1 "Pinnated" H 4975 10655 50  0000 L CNN
-F 2 "Pinnated:Pinnule" H 4950 10700 50  0001 C CNN
-F 3 "" H 4950 10700 50  0001 C CNN
-	1    4950 10700
-	1    0    0    -1  
-$EndComp
 $EndSCHEMATC
