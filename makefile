@@ -1,3 +1,7 @@
+#
+# srec_cat just_ata_ide.F000 -output a.out -C_Array 
+#
+
 all: just_lcd.s9 just_serial.s9 just_ram_lcd.s9 just_ram.s9 bios.s9 just_ata_ide.s9
 
 #

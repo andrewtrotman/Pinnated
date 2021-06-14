@@ -1,6 +1,6 @@
 serial_status 	EQU $E004
-serial_control EQU $E004
-serial_data		EQU $E005
+serial_control  EQU $E004
+serial_data	EQU $E005
 
 serial_status_tdre		EQU %00000010
 
@@ -8,8 +8,8 @@ serial_status_tdre		EQU %00000010
 serial_baud_rate_115200 EQU %00010110
 serial_reset EQU %00010111
 
+	ORG $F000
 start
-	ORG $F400
 	LDU #$B000
 	LDS #$C000
 
